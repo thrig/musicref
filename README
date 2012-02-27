@@ -1,1 +1,4 @@
-Reference musical material.
+Reference musical material. Lilypond will be necessary to build PDF and
+MIDI from the lilypond input files:
+
+http://lilypond.org/
