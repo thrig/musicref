@@ -1,0 +1,94 @@
+Given the pentatonic scales (taken from "Jazzology" p.29 and p.34):
+
+c   des ees g   aes      balinese
+c   des ees g   bes      pelog
+c   des f   ges bes      iwato
+c   des f   g   aes      japanese
+c   des f   g   bes      in sen
+c   d   ees g   aes      hirajoshi
+c   d   ees g   a        kumoi
+c   d   e   g   a        major
+c   d   f   g   bes      egyptian
+c   ees f   g   bes      minor
+c   e   fis g   b        chinese
+
+Then iterating over each scale, duplicating the root to the end, then
+shifting the root off, results in regional bias for the scales (and
+sometimes unknown to "Jazzology" scales):
+
+c   d   e   g   a       major
+d   e   g   a   c       egyptian
+e   g   a   c   d       ??
+g   a   c   d   e       ??
+a   c   d   e   g       minor
+c   d   e   g   a       major
+
+c   des f   g   aes     japanese
+des f   g   aes c       chinese
+f   g   aes c   des     hirajoshi
+g   aes c   des f       iwato
+aes c   des f   g       ??
+c   des f   g   aes     japanese
+
+c   des f   g   bes     in sen
+des f   g   bes c       ??
+f   g   bes c   des     ??
+g   bes c   des f       ??
+bes c   des f   g       kumoi
+c   des f   g   bes     in sen
+
+c   d   ees g   a       kumoi
+d   ees g   a   c       in sen
+ees g   a   c   d       ??
+g   a   c   d   ees     ??
+a   c   d   ees g       ??
+c   d   ees g   a       kumoi
+
+c   d   ees g   aes     hirajoshi
+d   ees g   aes c       iwato
+ees g   aes c   d       ??
+g   aes c   d   ees     japanese
+aes c   d   ees g       chinese
+c   d   ees g   aes     hirajoshi
+
+c   des ees g   bes     pelog
+des ees g   bes c       ??
+ees g   bes c   des     ??
+g   bes c   des ees     ??
+bes c   des ees g       ??
+c   des ees g   bes     pelog
+
+c   des ees g   aes     balinese
+des ees g   aes c       ??
+ees g   aes c   des     ??
+g   aes c   des ees     ??
+aes c   des ees g       ??
+c   des ees g   aes     balinese
+
+c   des f   ges bes     iwato
+des f   ges bes c       ??
+f   ges bes c   des     japanese
+ges bes c   des f       chinese
+bes c   des f   ges     hirajoshi
+c   des f   ges bes     iwato
+
+c   d   f   g   bes     egyptian
+d   f   g   bes c       ??
+f   g   bes c   d       ??
+g   bes c   d   f       minor
+bes c   d   f   g       major
+c   d   f   g   bes     egyptian
+
+c   ees f   g   bes     minor
+ees f   g   bes c       major
+f   g   bes c   ees     egyptian
+g   bes c   ees f       ??
+bes c   ees f   g       ??
+c   ees f   g   bes     minor
+
+c   e   ges g   b       chinese
+e   ges g   b   c       hirajoshi
+ges g   b   c   e       iwato
+g   b   c   e   ges     ??
+b   c   e   ges g       japanese
+c   e   ges g   b       chinese

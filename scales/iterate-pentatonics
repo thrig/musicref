@@ -1,0 +1,74 @@
+#!/usr/bin/perl
+#
+# Iterate through pentatonic scales, picking new scale from 2nd degree
+# of the scale, and so on.
+
+use strict;
+use warnings;
+
+my ( %pitch2note, %scales, $DIS );
+
+$DIS        = 12;    # degrees in scale
+%pitch2note = (
+  0  => 'c  ',
+  1  => 'des',
+  2  => 'd  ',
+  3  => 'ees',
+  4  => 'e  ',
+  5  => 'f  ',
+  6  => 'ges',
+  7  => 'g  ',
+  8  => 'aes',
+  9  => 'a  ',
+  10 => 'bes',
+  11 => 'b  '
+);
+
+while ( my $line = readline DATA ) {
+  next if $line =~ m/^[\s#]/;
+  chomp $line;
+  my ( $pitch_set, $note_names, $scale_name ) = split /\s{4,}/, $line, 3;
+
+  my @pitches = split /\s+/, $pitch_set;
+  $scales{"@pitches"} = { ps => \@pitches, name => $scale_name };
+}
+
+for my $key ( keys %scales ) {
+  my @set = @{ $scales{$key}->{ps} };
+  print join( " ", notify( \@set ), $scales{$key}->{name} ), "\n";
+  my $count = @set;
+  while ( $count-- > 0 ) {
+    push @set, $DIS + $set[0];
+    shift @set;
+    my $offset = $set[0];
+    my @toname = @set;
+    $_ -= $offset for @toname;
+    print join( "\t", notify( \@set ), $scales{"@toname"}->{name} || '??' ),
+      "\n";
+  }
+  print "\n";
+}
+
+sub notify {
+  my ($ps) = @_;
+  my @notes;
+  for my $n (@$ps) {
+    push @notes, $pitch2note{ $n % $DIS };
+  }
+  return "@notes    ";
+}
+
+# Taken from "Jazzology" p.29 and p.34, minus duplicate 'mongol' scale
+# (identical to major pitch set).
+__DATA__
+0 1 3 7 8       c  des ees g   aes      balinese
+0 1 3 7 10      c  des ees g   bes      pelog
+0 1 5 6 10      c  des f   ges bes      iwato
+0 1 5 7 8       c  des f   g   aes      japanese
+0 1 5 7 10      c  des f   g   bes      in sen
+0 2 3 7 8       c  d   ees g   aes      hirajoshi
+0 2 3 7 9       c  d   ees g   a        kumoi
+0 2 4 7 9       c  d   e   g   a        major
+0 2 5 7 10      c  d   f   g   bes      egyptian
+0 3 5 7 10      c  ees f   g   bes      minor
+0 4 6 7 11      c  e   fis g   b        chinese
