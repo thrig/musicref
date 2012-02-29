@@ -1,7 +1,13 @@
 #!/usr/bin/perl
 #
-# Utility to generate variations on an input melody (inversion,
-# retrograde, etc.)
+# Utility to generate variations on an input melody. Example usage:
+#
+#   $ ./variations --axis=d d e fis g a e a g fis b e a
+#   o:  D5 E5 Fsharp5 G5 A5 E5 A5 G5 Fsharp5 B5 E5 A5
+#   r:  A5 E5 B5 Fsharp5 G5 A5 E5 A5 G5 Fsharp5 E5 D5
+#   i:  D5 C5 Asharp4 A4 G4 C5 G4 A4 Asharp4 F4 C5 G4
+#   ri: D5 G5 C5 F5 E5 D5 G5 D5 E5 F5 G5 A5
+#   $ timidity a.midi
 
 use strict;
 use warnings;
