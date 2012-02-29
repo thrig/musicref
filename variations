@@ -1,0 +1,89 @@
+#!/usr/bin/perl
+#
+# Utility to generate variations on an input melody (inversion,
+# retrograde, etc.)
+
+use strict;
+use warnings;
+
+use Getopt::Long qw(GetOptions);
+use MIDI::Simple;
+use MIDI::Praxis::Variation ();
+
+my $channel   = 1;
+my $axis      = 'C5';
+my $transpose = 0;
+GetOptions( "axis|a=s" => \$axis, "transpose|t=s" => \$transpose );
+
+new_score;
+set_tempo 500_000;
+patch_change $channel, 1;
+noop "c$channel", 'f';
+
+# M'P'V needs upcased note names, allow lilypond-like input, etc.
+for ( @ARGV, $axis ) {
+  tr/abcdefg/ABCDEFG/;
+  s/is/sharp/;
+  s/es/flat/;
+  s/$/5/ unless m/\d$/;
+}
+
+my @o  = MIDI::Praxis::Variation::original(@ARGV);
+my @r  = reverse @o;
+my @i  = MIDI::Praxis::Variation::inversion( $axis, @ARGV );
+my @ri = MIDI::Praxis::Variation::retrograde_inversion( $axis, @ARGV );
+
+if ( $transpose != 0 ) {
+  $_ += $transpose for @i;
+  $_ += $transpose for @r;
+  $_ += $transpose for @ri;
+}
+
+print 'o:  ', join( ' ', map num2name($_), @o ),  "\n";
+print 'r:  ', join( ' ', map num2name($_), @r ),  "\n";
+print 'i:  ', join( ' ', map num2name($_), @i ),  "\n";
+print 'ri: ', join( ' ', map num2name($_), @ri ), "\n";
+
+n("n$_") for @o;
+r;
+r;
+n("n$_") for @r;
+r;
+r;
+n("n$_") for @i;
+r;
+r;
+n("n$_") for @ri;
+
+write_score "a.midi";
+
+# This is what MIDI::Praxis::Variation does, but that module interface
+# is annoying...
+#  if ($note =~ m/^([A-Za-z]+)(\d+)/) {
+#    $note = $MIDI::Simple::Note{$1} + $2 * 12;
+#  }
+#}
+
+sub num2name {
+  my $num    = shift;
+  my $octave = int( $num / 12 );
+  my $note   = $num % 12;
+
+  my %nn2name = (
+    0  => 'C',
+    1  => 'Dsharp',
+    2  => 'D',
+    3  => 'Dsharp',
+    4  => 'E',
+    5  => 'F',
+    6  => 'Fsharp',
+    7  => 'G',
+    8  => 'Gsharp',
+    9  => 'A',
+    10 => 'Asharp',
+    11 => 'B',
+  );
+
+  #  warn "DBG $num -> " . $nn2name{$note} . $octave, "\n";
+  return $nn2name{$note} . $octave;
+}
