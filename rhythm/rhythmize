@@ -1,0 +1,160 @@
+#!/usr/bin/perl
+#
+# Takes monophonic lilypond-lite notation as arguments and applies a
+# particular "meter" to it via emphasis of notes that fall on a beat.
+#
+# Related reading material:
+#
+# http://en.wikipedia.org/wiki/Meter_(music)
+# http://en.wikipedia.org/wiki/Composite_rhythm
+# http://en.wikipedia.org/wiki/Time_signature
+# http://www.jessicarudman.com/Rudman_Hidden_Complexity.pdf
+
+use strict;
+use warnings;
+
+use Getopt::Long qw/GetOptions/;
+use MIDI::Simple ();
+
+my %Durmap     = qw/1 wn 2 hn 4 qn 8 en 16 sn/;
+my $Magic_Tick = 96;
+
+# Hand coded due to 3/4 being a little different than 6/8 is...
+my %Beatmap = (
+  '2/4' => {
+    major => $Magic_Tick * 2,
+    minor => $Magic_Tick,
+  },
+  '4/4' => {
+    major => $Magic_Tick * 4,
+    minor => $Magic_Tick * 2,
+  },
+  '3/4' => {
+    major => $Magic_Tick * 3,
+    minor => $Magic_Tick,
+  },
+  '6/8' => {
+    major => $Magic_Tick * 3,
+    minor => $Magic_Tick * 3 / 2,
+  },
+  '9/8' => {
+    major => $Magic_Tick * 9 / 4,
+    minor => $Magic_Tick * 3 / 2,
+  },
+);
+
+my $meter       = '2/4';
+my $output_file = 'a.midi';
+my $tempo       = 120;        # quarter notes per minute
+my $volume      = 50;         # base volume
+
+Getopt::Long::Configure("bundling");
+GetOptions(
+  'meter|time|m=s' => \$meter,
+  'output|o=s'     => \$output_file,
+  'tempo|t=i'      => \$tempo,
+  'verbose|v'      => \my $is_verbose,
+  'volume|V=s'     => \$volume,
+) || die "error: could not parse options";
+
+die "error: unknown meter $meter\n" unless exists $Beatmap{$meter};
+
+if ( $volume =~ /\D/ ) {
+  $volume = $MIDI::Simple::Volume{$volume};
+}
+die "error: invalid volume '$volume'\n"
+  unless defined $volume
+    and $volume =~ m/^\d+$/
+    and $volume >= 0
+    and $volume <= 127;
+
+unless (@ARGV) {
+  @ARGV = ("c8") x 32;
+  warn "notice: no notes specified, using a bunch of c8s in $meter\n";
+}
+
+my $midi = MIDI::Simple->new_score();
+$midi->set_tempo( int( 60_000_000 / $tempo ) );
+$midi->noop(qw/c1 mf o5/);
+
+my $position = 0;
+my $note     = 1;
+for my $n (@ARGV) {
+  my $ns     = parse_note($n);
+  my $method = exists $ns->{'is_rest'} ? 'r' : 'n';
+  my @params = map { exists $ns->{$_} ? $ns->{$_} : () } qw/duration note/;
+
+  my $levels = 0;
+  ++$levels if 0 == $position % $Beatmap{$meter}{'major'};
+  ++$levels if 0 == $position % $Beatmap{$meter}{'minor'};
+  if ($is_verbose) {
+    print "n$note\t$levels\n";
+  }
+  push @params, 'v' . ( $volume + 25 * $levels );
+
+  $midi->$method(@params);
+
+  $position += $MIDI::Simple::Length{ $ns->{'duration'} } * $Magic_Tick;
+  ++$note;
+}
+
+$midi->write_score($output_file);
+exit 0;
+
+########################################################################
+#
+# SUBROUTINES
+
+# Quick n' dirty lilypond input to something hopefully suitable for
+# MIDI::Simple so can type up more-or-less-lilypond input.
+sub parse_note {
+  my ($note) = @_;
+  my $ns = {};
+
+  $note =~ s/^\s+//;
+
+  if ( $note =~ /^([abcdefgrs])((?:es|is|ih|is)+)?/cg ) {
+    $ns->{'note'} = uc($1);
+    my $flavor = $2 || '';
+
+    $ns->{'is_rest'} = 1 if $ns->{'note'} =~ m/[RS]/;
+
+    # TODO double sharp|flat support, (microtonal support)
+    if ( $flavor =~ /is/ ) {
+      $ns->{'note'} .= 'sharp';
+    } elsif ( $flavor =~ /es/ ) {
+      $ns->{'note'} .= 'flat';
+    }
+  } else {
+    die "error: unknown note: $note\n";
+  }
+
+LEX: {
+    if ( !exists $ns->{'motion'} and $note =~ /\G([,'])/cg ) {
+      $ns->{'motion'} = $1;
+      redo LEX;
+    }
+    if ( !exists $ns->{'duration'}
+      and $note =~ /\G(1|2|4|8|16)([.]*)/cg ) {
+      my $dur = $1;
+      my $dots = $2 || '';
+      $ns->{'duration'} = ( 'd' x length $dots ) . $Durmap{$dur};
+      redo LEX;
+    }
+    if ( !exists $ns->{'volume'}
+      and $note =~ /\G\\(ppp|pp|p|mp|mf|f|ff|fff)/cg ) {
+      $ns->{'volume'} = $1;
+      redo LEX;
+    }
+    # TODO will need alphanum duration converted to full numeric, then
+    # add the first + nth other ties to this one via recursive
+    # processing of addition notes beyond first?
+    if ( $note =~ /\G([~])/cg ) { die "error: ~ ties not yet supported" }
+
+    if ( $note =~ m/\G./cgs ) { redo LEX; }    # unknown, move char forward
+
+    #   if ( $note =~ /\G()/cg ) { }
+  }
+
+  return $ns;
+}

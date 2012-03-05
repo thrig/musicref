@@ -1,0 +1,53 @@
+#!/usr/bin/perl
+#
+# Prints out rhythmic accents for various beats in columns.
+
+use strict;
+use warnings;
+
+use MIDI::Simple ();
+my $Magic_Tick = 96;
+
+# Hand coded due to 3/4 being a little different than 6/8 is...
+my %Beatmap = (
+  '2/4' => {
+    major => $Magic_Tick * 2,
+    minor => $Magic_Tick,
+  },
+  '4/4' => {
+    major => $Magic_Tick * 4,
+    minor => $Magic_Tick * 2,
+  },
+  '3/4' => {
+    major => $Magic_Tick * 3,
+    minor => $Magic_Tick,
+  },
+  '6/8' => {
+    major => $Magic_Tick * 3,
+    minor => $Magic_Tick * 3 / 2,
+  },
+  '9/8' => {
+    major => $Magic_Tick * 9 / 4,
+    minor => $Magic_Tick * 3 / 2,
+  },
+);
+
+print join( "\t", "Note#", sort keys %Beatmap, "MIDI Pos." ), "\n";
+
+my $position = 0;
+my $note     = 1;
+for my $dur ( ("en") x 22 ) {
+  my @beat_spec;
+
+  for my $map ( sort keys %Beatmap ) {
+    my $level = 0;
+    ++$level if 0 == $position % $Beatmap{$map}{'major'};
+    ++$level if 0 == $position % $Beatmap{$map}{'minor'};
+    push @beat_spec, $level;
+  }
+
+  print join( "\t", $note++, @beat_spec, $position ), "\n";
+  $position += $MIDI::Simple::Length{$dur} * $Magic_Tick;
+}
+
+exit 0;
