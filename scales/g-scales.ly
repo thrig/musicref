@@ -20,6 +20,7 @@ upper = {
   \relative g' {
     g4^"Mixolydian" a b c d e f g <g, b d>1
   }
+  \key g \minor
   \relative g' {
     g4^"Dorian" a bes c d e f g <g, bes d>1
   }
