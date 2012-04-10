@@ -1,6 +1,4 @@
 % LilyPond engraving system - http://www.lilypond.org/
-%
-% Example phrases all using the common chord of G7.
 
 \version "2.12.0"
 
@@ -37,7 +35,7 @@ tempoAndStuff = {
   g2 c,~ |
   g2 c~  |
 
-  e4 \set PianoStaff.midiInstrument = #"reed organ" \set Staff.midiInstrument = #"reed organ" b'4\rest  g2 |
+  e4 \set PianoStaff.midiInstrument = #"acoustic grand" \set Staff.midiInstrument = #"acoustic grand" b'4\rest  g2 |
   c4 s4 e2 |
   g4 s4 g2 |
   c4 d4\rest c2 |
@@ -49,7 +47,7 @@ tempoAndStuff = {
   f2 g |
   a'2 g |
 
-  e2. \set PianoStaff.midiInstrument = #"acoustic grand" \set Staff.midiInstrument = #"acoustic grand" b'4\rest |
+  e2. \set PianoStaff.midiInstrument = #"reed organ" \set Staff.midiInstrument = #"reed organ" b'4\rest |
   c2. s4 |
   g2. d4\rest |
   c,2. s4 |
