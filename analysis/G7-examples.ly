@@ -35,17 +35,41 @@ tempoAndStuff = {
   g2 c,~ |
   g2 c~  |
 
-  e4 b'4\rest |
-  c4 s4 |
-  g4 s4 |
-  c4 d4\rest |
-  c4 r4 |
+  e4 b'2\rest fis'4~ |
+  c4 s2 fis4~ |
+  g4 s2 s4 |
+  c4 d2\rest \clef treble s4 |
+  c4 r2 s4 |
+
+  \key d \major fis4~ fis2 fis4~ |
+  fis4 a2 b4~ |
+  \key d \major b'4\rest a,2 d4~ |
+  s1 |
+  \key d \major r4 d2 b4~ |
+
+  fis4 f2^"G7" e4~ |
+  b4 b2~ b4~ |
+  d4~ d2 e4~ |
+  s1 |
+  b4 g2 g4~ |
+
+  e4~ e2 fis4~ |
+  b4  cis2 a4~ |
+  e4  e2  d4~ |
+  s1 |
+  g4 a2 d,4~ |
+
+  fis2 s2 |
+  a2 b2\rest |
+  d2 b'2\rest \clef bass |
+  s1 |
+  d2 r2 |
 
   \key ees \major g2 f2^"G7" |
   ees2 d |
-  \key ees \major bes2 b |
+  \key ees \major bes,2 b |
   ees2 g |
-  \key ees \major ees2 g |
+  \key ees \major ees'2 g |
 
   ees2 des |
   c2 bes |
@@ -59,17 +83,11 @@ tempoAndStuff = {
   aes,2 bes |
   aes,2 bes |
 
-  bes2~ |
-  g2~ |
-  ees2~ |
-  ees,2~ |
-  ees,2~ |
-
-  bes4 b'2.\rest |
-  g4 s2. |
-  ees4 d2.\rest |
-  ees4 s2. |
-  ees4 d'2.\rest |
+  bes2. b4\rest |
+  g2. s4 |
+  ees2. b'4\rest |
+  ees,2. s4 |
+  ees,2. r4 |
   \bar "||"
 }
 
