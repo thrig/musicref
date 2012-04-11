@@ -35,27 +35,15 @@ tempoAndStuff = {
   g2 c,~ |
   g2 c~  |
 
-  e4 \set PianoStaff.midiInstrument = #"acoustic grand" \set Staff.midiInstrument = #"acoustic grand" b'4\rest  g2 |
-  c4 s4 e2 |
-  g4 s4 g2 |
-  c4 d4\rest c2 |
-  c4 r4 c2 |
-
-  f2~ f^"G7" |
-  des2 d |
-  a2 b |
-  f2 g |
-  a'2 g |
-
-  e2. \set PianoStaff.midiInstrument = #"reed organ" \set Staff.midiInstrument = #"reed organ" b'4\rest |
-  c2. s4 |
-  g2. d4\rest |
-  c,2. s4 |
-  c,2. r4 | \break
+  e4 b'4\rest |
+  c4 s4 |
+  g4 s4 |
+  c4 d4\rest |
+  c4 r4 |
 
   \key ees \major g2 f2^"G7" |
   ees2 d |
-  \key ees \major bes'2 b |
+  \key ees \major bes2 b |
   ees2 g |
   \key ees \major ees2 g |
 
@@ -71,11 +59,18 @@ tempoAndStuff = {
   aes,2 bes |
   aes,2 bes |
 
-  bes2. b'4\rest |
-  g2. s4 |
-  ees2. d4\rest |
-  ees,2. s4 |
-  ees,2. r4 |
+  bes2~ |
+  g2~ |
+  ees2~ |
+  ees,2~ |
+  ees,2~ |
+
+  bes4 b'2.\rest |
+  g4 s2. |
+  ees4 d2.\rest |
+  ees4 s2. |
+  ees4 d'2.\rest |
+  \bar "||"
 }
 
 theMusic = {
