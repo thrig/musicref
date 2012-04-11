@@ -17,7 +17,13 @@
   a4 b c c\fermata
   c4 d_"hf" e e\fermata
   e4 e d c
-  b4~ b8 a_"pf" a2\fermata
+  b4~
+\override NoteHead #'color = #red
+\override NoteHead #'style = #'diamond
+      b8 a
+\override NoteHead #'color = #black
+\revert NoteHead #'style
+           a2\fermata
 } \\ {
   e4 e e e
   e4 g g g
@@ -33,7 +39,13 @@
   c4 b a a\fermata
   a4 b c c\fermata
   c8 d c b a b c e
-  f4 e8 d cis2\fermata
+  f4
+\override NoteHead #'color = #red
+\override NoteHead #'style = #'diamond
+     e8 d
+\revert NoteHead #'style
+\override NoteHead #'color = #black
+          cis2\fermata
 } \\ {
   a4 gis a a,
   a' g c c,
