@@ -1,0 +1,74 @@
+#!/usr/bin/perl
+#
+# Left hand rhythmic patterns from Beethoven's Piano Sonata No.1, first
+# movement. Markov engine trained at the measure level, somewhat based
+# on phrases in the music, with slight overlaps between the phrases.
+# (The actual Beethoven is slightly more complicated, as cross-measure
+# ties were ignored, along with other multi-voice complexity.)
+#
+# Inspect results via something like:
+#   ly-fu --open --tempo=168 --relative=c\' \\partial 4 \
+#     $(perl beethoven-s1-m1-rhythm-markov)
+
+use strict;
+use warnings;
+
+use 5.10.0;
+use Any::Moose;
+use Hailo;
+
+my %states2ly = (
+  A => "N4-| N4-| N4-| N4-|",
+  B => "N4 N2 N4",
+  C => "r4 N4 N4 N4",
+  D => "N8 N8 N8 N8 N8 N8 N8 N8",
+  E => "N4 r4 r4 N4",
+  G => "N1",
+  H => "N4 N4 N4 N4",
+  I => "r4 N4 r4 N4",
+  J => "N2 N2",
+  K => "N4 N4 N8 N8 N8 N8",
+  L => "N4 N4 r4 N4",
+  M => "N4. N8 N4 N4",
+  N => "N4 r4 r2",
+  N => "N4 r4 r2",
+  O => "N4. N16 N16 N16 N4-. N4-.",
+  P => "N2 r2",
+  Q => "N4 r4 N4 r4",
+  R => "N2. N4",
+  R => "R1",
+  S => "r4",
+);
+
+my $hailo      = Hailo->new;
+my @train_this = (
+  "S R C N C C C I I",
+  "I A O G G G G J E J E",
+  "E J D D K D K D D D D D D D D",
+  "D B B B H B B B H L",
+  "L I I I I I G N",
+  "S R C C R C C D D K D K D D D D D K D K H",
+  "H M H M H B B B B B B B B",
+  "B D D D D D D D D D D D D A A",
+  "A H H H H H H N C N C P P Q E",
+  "E A O G G G G R H H H D D K D K D D D D D D D D B B B H B B B C L I I I I I G E G E H Q N"
+);
+$hailo->learn( \@train_this );
+
+my %unknowns;
+for my $s (@train_this) {
+  for my $c ( split ' ', $s ) {
+    if ( !exists $states2ly{$c} ) {
+      $unknowns{$c}++;
+    }
+  }
+}
+if (%unknowns) {
+  die "error unknown labels in training material: ", sort( keys %unknowns ),
+    "\n";
+}
+
+( my $fragment = $hailo->reply("S") ) =~ s/(\w)/$states2ly{$1}/g;
+$fragment =~ s/\.$//;
+$fragment =~ s/N/c/g;
+say $fragment;
