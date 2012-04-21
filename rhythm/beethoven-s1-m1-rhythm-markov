@@ -6,6 +6,8 @@
 # (The actual Beethoven is slightly more complicated, as cross-measure
 # ties were ignored, along with other multi-voice complexity.)
 #
+# http://imslp.org/wiki/Piano_Sonata_No.1,_Op.2/1_%28Beethoven,_Ludwig_van%29
+#
 # Inspect results via something like:
 #   ly-fu --open --tempo=168 --relative=c\' \\partial 4 \
 #     $(perl beethoven-s1-m1-rhythm-markov)
@@ -17,6 +19,11 @@ use 5.10.0;
 use Any::Moose;
 use Hailo;
 
+# The rhythmic content of each measure is replaced by a label, which is
+# used below to train the Markov engine. Output from the engine is
+# expanded with the contents of each resulting measure using this hash.
+# A composition would need to have harmony and whatnot fit into any
+# suitable output the engine produces.
 my %states2ly = (
   A => "N4-| N4-| N4-| N4-|",
   B => "N4 N2 N4",
@@ -41,6 +48,8 @@ my %states2ly = (
 );
 
 my $hailo      = Hailo->new;
+# Note the overlap on some measures, and ignoring of certain ties and
+# other complexities in the source material.
 my @train_this = (
   "S R C N C C C I I",
   "I A O G G G G J E J E",
