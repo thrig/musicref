@@ -1,6 +1,9 @@
 % Bass forms the beat (duple), tenor a triple layer on top of that
 % (pulses), and the taps would be for ornament. (Derived from "Dance and
 % the Music of J.S. Bach" by Meredith Little and Natalie Jenne.)
+%
+% "L'aimable Vainqueur" sheet music of sorts can be found online for the
+% form reputedly favored by the Sun King.
 
 \version "2.12.0"
 
