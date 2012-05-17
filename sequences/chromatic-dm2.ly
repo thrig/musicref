@@ -4,7 +4,7 @@
 
 \header {
   title = "Chromatic D2 (-P4/+m3)"
-  subtitle = "Barely tonal, must break off rep on ♭IV"
+  subtitle = "Barely tonal, must break off rep on ♭VI"
   subsubtitle = "and thence to pre-dom function (per TCM)"
 }
 
