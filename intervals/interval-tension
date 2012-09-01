@@ -1,0 +1,66 @@
+#!/usr/bin/env perl
+#
+# Interval tension analysis, implementation based on David Cope's
+# "octave projection" of the fundamental (with ref to "The Craft of
+# Musical Composition" by Paul Hindemith in 1937) in "Computer Models of
+# Musical Creativity" p.227.
+#
+# Via lilypond (see other files in this dir) and piano practice, a 9th
+# is much more pleasant than a 2nd, and higher octaves are very much
+# disconnected from the fundamental (though that might have something to
+# do with the piano tuning as well (octave stretching?)).
+#
+# But Cope then appears to throw all the partial foo and ratios away,
+# and presents the formula f(x) = y + (cos((-1*z)+x/z))/2 where x is the
+# pitch-class interval, y ... uhh, the y-coordinate, and z a constant.
+# Intervals > octave have slightly less tension (0.02). p.230 has y=0.5
+# and z=0.9. A continuous function has the advantage of being readily
+# adaptable to microtonal or frequency inputs, I guess.
+
+use strict;
+use warnings;
+
+my $DEG_IN_SCALE = 12;
+
+# Semitones of partials
+my @OVERTONES = (qw/0 12 19 24 28 31 34 36 38 40 42 43 45 46 47 48/);
+
+# This shows the partial an interval can be found at, and whether the
+# fundamental is equal or equivalent, above, below, or unknown, but does
+# not provide a value for the tension of said interval.
+INTERVAL: for my $i ( 0 .. 19 ) {
+  my ( $partial, $dir ) = interval_partial( $i, \@OVERTONES );
+  printf "interval %2d found at partial %2d %s\n", $i, $partial, $dir;
+}
+
+sub interval_partial {
+  my ( $interval, $overtones ) = @_;
+  my ( $partial, @dirs );
+
+  # this assumes that the scale system has "octave" equivalence...
+  if ( $interval == 0 ) {
+    $partial = 0;
+    @dirs    = 'unison';
+
+  } elsif ( $interval % $DEG_IN_SCALE == 0 ) {
+    $partial = 1;
+    @dirs    = 'octave';
+
+  } else {
+    for my $oti ( 0 .. $#$overtones ) {
+      next if $overtones->[$oti] % $DEG_IN_SCALE == 0; # octave equivs of root
+
+      if ( ( $overtones[$oti] - $interval ) % $DEG_IN_SCALE == 0 ) {
+        $partial = $oti;
+        push @dirs, 'below';
+      }
+      if ( ( $overtones[$oti] + $interval ) % $DEG_IN_SCALE == 0 ) {
+        $partial = $oti + 1 unless @dirs;
+        push @dirs, 'above';
+      }
+      @dirs = 'unclear' if @dirs > 1;
+      last if @dirs;
+    }
+  }
+  return $partial, $dirs[0];
+}
