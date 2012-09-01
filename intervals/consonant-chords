@@ -1,0 +1,68 @@
+So wikipedia artice on Consonance & Dissonance has an image link
+containing the following; I've added atonal prime form and ICC and other
+ruminations.
+
+1. Triads consisting of three consonances:
+
+   <c ees g>		[0,3,7] 001110
+   <c e g>
+
+   <c e aes>		[0,4,8] 000300
+
+"Counterpoint in Composition" p.28 ex 1-62 allows the above, and also:
+
+   <d f b>		[0,3,6] 002001
+   (but only in this formulation, with tritone on top)
+
+2. Triads consisting of two consonances and one mild dissonance:
+
+   <c d a'>		[0,2,5] 011010
+   <c g' a>
+   <c ees bes'>
+   <c g' bes>
+
+   So one major second, ic2.
+
+3. Triads consisting of one consonance and two mild dissonances:
+
+   <c d e>		[0,2,4] 020100
+   <c d bes'>
+   <c aes' bes'>
+
+   Two major seconds or 2x ic2.
+
+4. Triads consisting of two consonances and a sharp dissonance:
+
+   <c des e>		[0,1,4] 101100
+   <c des a'>
+   <c dis e>
+   <c ees b'>
+   <c gis' a>
+   <c aes' b>
+
+   <c des aes'>		[0,1,5] 100110
+   <c e b'>
+   <c g' aes>
+   <c g' b>
+
+5. Triads consisting of one consonance, one mild dissonance, and a sharp
+   dissonance:
+
+   <c des ees>		[0,1,3] 111000
+   <c des bes'>
+   <c d ees>
+   <c d b'>
+   <c a' bes>
+   <c a' b>
+
+6. Triads consisting of one mild dissonance, and two sharp ones:
+
+   <bis cis d>		[0,1,2] 210000
+   <c des b'>
+   <c ais' b>
+
+So atonal prime form and ICC do indicate dissonance, with more and more
+sharply dissonance favoring ic2 and ic1 interval counts, while consonant
+chords show more even spread across the octave. But this would require
+human inspection to derive, or some algorithm that weights the ICC
+members in addition to how closely the chord is spaced.
