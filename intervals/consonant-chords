@@ -1,22 +1,22 @@
-So wikipedia artice on Consonance & Dissonance has an image link
-containing the following; I've added atonal prime form and ICC and other
-ruminations.
+So wikipedia artice on Consonance & Dissonance has an image link (of
+Ernst Kreneck's classification) containing the following; I've added
+atonal prime form and ICC and other ruminations.
 
 1. Triads consisting of three consonances:
 
-   <c ees g>		[0,3,7] 001110
+   <c ees g>            [0,3,7] 001110
    <c e g>
 
-   <c e aes>		[0,4,8] 000300
+   <c e aes>            [0,4,8] 000300
 
 "Counterpoint in Composition" p.28 ex 1-62 allows the above, and also:
 
-   <d f b>		[0,3,6] 002001
+   <d f b>              [0,3,6] 002001
    (but only in this formulation, with tritone on top)
 
 2. Triads consisting of two consonances and one mild dissonance:
 
-   <c d a'>		[0,2,5] 011010
+   <c d a'>             [0,2,5] 011010
    <c g' a>
    <c ees bes'>
    <c g' bes>
@@ -25,7 +25,7 @@ ruminations.
 
 3. Triads consisting of one consonance and two mild dissonances:
 
-   <c d e>		[0,2,4] 020100
+   <c d e>              [0,2,4] 020100
    <c d bes'>
    <c aes' bes'>
 
@@ -33,14 +33,14 @@ ruminations.
 
 4. Triads consisting of two consonances and a sharp dissonance:
 
-   <c des e>		[0,1,4] 101100
+   <c des e>            [0,1,4] 101100
    <c des a'>
    <c dis e>
    <c ees b'>
    <c gis' a>
    <c aes' b>
 
-   <c des aes'>		[0,1,5] 100110
+   <c des aes'>         [0,1,5] 100110
    <c e b'>
    <c g' aes>
    <c g' b>
@@ -48,7 +48,7 @@ ruminations.
 5. Triads consisting of one consonance, one mild dissonance, and a sharp
    dissonance:
 
-   <c des ees>		[0,1,3] 111000
+   <c des ees>          [0,1,3] 111000
    <c des bes'>
    <c d ees>
    <c d b'>
@@ -57,7 +57,7 @@ ruminations.
 
 6. Triads consisting of one mild dissonance, and two sharp ones:
 
-   <bis cis d>		[0,1,2] 210000
+   <bis cis d>          [0,1,2] 210000
    <c des b'>
    <c ais' b>
 

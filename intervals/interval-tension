@@ -50,11 +50,11 @@ sub interval_partial {
     for my $oti ( 0 .. $#$overtones ) {
       next if $overtones->[$oti] % $DEG_IN_SCALE == 0; # octave equivs of root
 
-      if ( ( $overtones[$oti] - $interval ) % $DEG_IN_SCALE == 0 ) {
+      if ( ( $overtones->[$oti] - $interval ) % $DEG_IN_SCALE == 0 ) {
         $partial = $oti;
         push @dirs, 'below';
       }
-      if ( ( $overtones[$oti] + $interval ) % $DEG_IN_SCALE == 0 ) {
+      if ( ( $overtones->[$oti] + $interval ) % $DEG_IN_SCALE == 0 ) {
         $partial = $oti + 1 unless @dirs;
         push @dirs, 'above';
       }
