@@ -39,7 +39,7 @@ Since the first note must repeat, fill it in at the last measure:
 }
 
 \markuplines { \paragraph {
-Next, decide the offset between the first and second voice. Too small a value, and the musical will run into one another, while too large a value will yield unrelated strains many octaves apart. Let's use four, so count up four notes starting from and including the first note, then place that note in the next measure over:
+Next, decide the offset between the first and second voice. Too small a value, and the voices will run into one another, while too large a value will yield unrelated strains many octaves apart. Let's use four, so count up four notes starting from and including the first note, then place that note in the next measure over:
 } }
 
 {
