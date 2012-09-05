@@ -92,3 +92,25 @@ ges g   b   c   e       iwato
 g   b   c   e   ges     ??
 b   c   e   ges g       japanese
 c   e   ges g   b       chinese
+
+
+Atonal prime form and ICC for these scales:
+
+[0,1,5,6,8]	211231 
+  c   des ees g   aes     balinese
+  c   e   fis g   b       chinese
+  c   d   ees g   aes     hirajoshi
+  c   des f   ges bes     iwato
+  c   des f   g   aes     japanese
+
+[0,2,3,5,8]	123121
+  c   des ees g   bes     pelog
+
+[0,1,3,6,8]	122131 
+  c   des f   g   bes     in sen
+  c   d   ees g   a       kumoi
+
+[0,2,4,7,9]	032140 
+  c   d   f   g   bes     egyptian
+  c   d   e   g   a       major
+  c   ees f   g   bes     minor
