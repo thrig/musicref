@@ -63,6 +63,7 @@ if ( $ARGV[0] =~ m/^\d+/ ) {
   $theme = \@ARGV;
 } else {
   $theme = $atu->notes2pitches( \@ARGV );
+  warn "Theme: ", join( ' ', @$theme ), "\n";
 }
 
 my $min_offset    = 1;
