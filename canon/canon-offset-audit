@@ -21,11 +21,12 @@ use List::Util qw(max min sum);
 use Music::AtonalUtil ();
 
 GetOptions(
+  'help'          => \&print_help,
   'inverse'       => \my $Flag_Inverse,
   'offset=i'      => \my $Flag_Offset,
   'show-tensions' => \my $Flag_Show_Tensions,
   'transpose=i'   => \my $Flag_Transpose,
-) || die "error reading options";
+) || print_help();
 
 # Interval tentions taken from "Computer Models of Musical Creativity",
 # Cope, p.229-230, from least tension (0.0) to greatest (1.0).
@@ -49,6 +50,8 @@ my $octave_adjust = -0.02;
 ########################################################################
 #
 # MAIN
+
+print_help() unless @ARGV;
 
 my $atu = Music::AtonalUtil->new;
 
@@ -138,6 +141,38 @@ sub mean {
     for (@$arrayref) { $sum += $_ }
   }
   return $sum / $n;
+}
+
+sub print_help {
+  warn <<"END_HELP";
+Usage: $0 [options] notes or semitone numbers ...
+
+  --help             Display this message and exit.
+  --inverse          Compare theme with its inverse canonic line.
+  --offset=i         Only offset the comparison line by i.
+  --show-tensions    Show all interval tensions in output.
+  --transpose=i      Only transpose comparison line by i.
+  --verbose          Show noise from lilypond, MIDI player.
+
+Example Usage:
+  $0 c g a e f c f g | sort -n
+
+Whose output indicates that an offset of four and transposition by 12
+semitones should be very consonant:
+
+  P:  c g a e f  c  f  g
+  R:  r r r r c' g' a' e' ...
+
+While an offset of four and transposition by 4 semitones would be very
+dissonant:
+
+  P:  c g a e f  c  f   g
+  R:  r r r r e  b  des aes
+
+Among various other options more and less consonant.
+
+END_HELP
+  exit 64;
 }
 
 # $sd = standard_deviation_data(\@array) computes the standard
