@@ -1,10 +1,10 @@
 #!/usr/bin/env perl
 #
-# Calculate interval tension sum for parallel canonic themes under
-# various offset counts and transpositions. (May come up with low
-# tension values for lines that would not normally be permitted under
-# various rule systems (parallel fifths or octaves, etc); something else
-# would need to audit for such.)
+# Calculate interval tension sum for canonic themes under various offset
+# counts and transpositions. (May come up with low tension values for
+# lines that would not normally be permitted under various rule systems
+# (parallel fifths or octaves, etc); something else would need to audit
+# for such.)
 #
 # TODO support rhythm (Cope has equations and advice on this on
 # subsequent pages to what used below).
@@ -12,6 +12,13 @@
 # TODO also multiple lines against each other, as adding a 3rd or 4th
 # line may change what offsets and transpositions create the overall
 # most consonant combination.
+#
+# TODO offset, transpose should accept lists or ranges of values.
+#
+# TODO interval histograms (via R?) would be nice, so can see how many
+# minor 3rds or what else a particular combination has. (Or lilypond
+# output, to generate music for all the combinations, with intervals
+# labelled.)
 
 use strict;
 use warnings;
@@ -24,8 +31,10 @@ GetOptions(
   'help'          => \&print_help,
   'inverse'       => \my $Flag_Inverse,
   'offset=i'      => \my $Flag_Offset,
+  'ostinato'      => \my $Flag_Ostinato,
   'show-tensions' => \my $Flag_Show_Tensions,
   'transpose=i'   => \my $Flag_Transpose,
+  'verbose'       => \my $Flag_Verbose,
 ) || print_help();
 
 # Interval tentions taken from "Computer Models of Musical Creativity",
@@ -55,34 +64,26 @@ print_help() unless @ARGV;
 
 my $atu = Music::AtonalUtil->new;
 
-my $theme;
+my $Theme;
 # Assume semitone pitch numbers, else try to convert note names to such.
-# (Notes in particular do not support registers, so must use semitone
-# pitch numbers if need that.)
+# (Notes in particular do not (yet) support registers, so must use
+# semitone pitch numbers if need that.)
 if ( $ARGV[0] =~ m/^\d+/ ) {
-  $theme = \@ARGV;
+  $Theme = [ map { /^[rR]/ ? undef : $_ } @ARGV ];
 } else {
-  $theme = $atu->notes2pitches( \@ARGV );
-  warn "Theme: ", join( ' ', @$theme ), "\n";
+  $Theme = $atu->notes2pitches( \@ARGV );
 }
 
 my $min_offset    = 1;
-my $max_offset    = min( int( @$theme / 2 ), 4 );
+my $max_offset    = min( int( @$Theme / 2 ), 4 );
 my $min_transpose = -19;
 my $max_transpose = 19;
 
-if ($Flag_Inverse) {
-  $theme = canonic_inverse($theme);
-
-  my $inverse_notes = $atu->pitches2notes($theme);
-  warn "Inverse Theme: ", join( ' ', @$inverse_notes ), " ",
-    join( ' ', @$theme ), "\n";
-}
 if ( defined $Flag_Offset ) {
   die
     "offset must be positive integer (and ideally less than length of theme)\n"
     if $Flag_Offset < 0
-      or $Flag_Offset >= @$theme;
+      or $Flag_Offset >= @$Theme;
   $min_offset = $max_offset = $Flag_Offset;
 }
 if ( defined $Flag_Transpose ) {
@@ -91,11 +92,33 @@ if ( defined $Flag_Transpose ) {
 
 for my $offset ( $min_offset .. $max_offset ) {
   for my $transpose ( $min_transpose .. $max_transpose ) {
-    my @tensions;
-    for my $i ( $offset .. $#$theme ) {
-      push @tensions,
-        tension( $theme->[$i], $theme->[ $i - $offset ] + $transpose );
+    my @theme_proposta = @$Theme;
+    my @theme_risposta = risposta( $Theme, $Flag_Inverse, $transpose );
+    if ( $offset > 0 ) {
+      unshift @theme_risposta, (undef) x $offset;
+      if ($Flag_Ostinato) {
+        for my $i ( 0 .. $#theme_risposta ) {
+          $theme_proposta[$i] = $Theme->[ $i % @$Theme ];
+        }
+      }
     }
+
+    if ($Flag_Verbose) {
+      warn "P O${offset},T${transpose}\t",
+        join( ' ', map { defined $_ ? $_ : 'r' } @theme_proposta ),
+        "\n";
+      warn "R O${offset},T${transpose}\t",
+        join( ' ', map { defined $_ ? $_ : 'r' } @theme_risposta ),
+        "\n";
+    }
+
+    my @tensions;
+    for my $i ( 0 .. $#theme_proposta ) {
+      push @tensions, tension( $theme_proposta[$i], $theme_risposta[$i] );
+    }
+
+    die "no tension\n" unless @tensions;
+
     my $max     = max(@tensions);
     my $min     = min(@tensions);
     my $tension = sum(@tensions);
@@ -104,10 +127,11 @@ for my $offset ( $min_offset .. $max_offset ) {
     $tension /= @tensions;
 
     my $tension_str = "";
-    $tension_str = " @tensions" if $Flag_Show_Tensions;
+    $tension_str = " " . join( ' ', grep defined, @tensions )
+      if $Flag_Show_Tensions;
 
     printf
-      "%.03f O(%d) T(% 2d)\tMin(%.03f) Max(%.03f) Mean(%.03f) SDev(%.03f)%s\n",
+      "%.03f O%d,T%d\tMin(%.03f) Max(%.03f) Mean(%.03f) SDev(%.03f)%s\n",
       $tension, $offset,
       $transpose, $min, $max, mean( \@tensions ),
       standard_deviation( \@tensions ),
@@ -125,10 +149,24 @@ sub canonic_inverse {
   my ($theme) = @_;
   my @inverse_theme = $theme->[0];
   for my $i ( 1 .. $#$theme ) {
-    my $delta = $theme->[$i] - $theme->[ $i - 1 ];
-    $inverse_theme[$i] = $inverse_theme[ $i - 1 ] + ( -1 * $delta );
+    if ( defined $i ) {
+      # Must look back for first non-note rest, and if the canon begins
+      # with rests, must catch first non-rest pitch and insert that for
+      # subsequent reverse searches to find.
+      for my $j ( reverse 0 .. $i - 1 ) {
+        next unless defined $theme->[$j];
+        $inverse_theme[$i] =
+          $inverse_theme[$j] + ( -1 * ( $theme->[$i] - $theme->[$j] ) );
+      }
+      if ( !defined $inverse_theme[$i] ) {
+        $inverse_theme[$i] = $theme->[$i];
+      }
+    } else {
+      # copy rests
+      $inverse_theme[$i] = undef;
+    }
   }
-  return \@inverse_theme;
+  return @inverse_theme;
 }
 
 # $mean = mean(\@array) computes the mean of an array of numbers.
@@ -151,6 +189,7 @@ Usage: $0 [options] notes or semitone numbers ...
   --help             Display this message and exit.
   --inverse          Compare theme with its inverse canonic line.
   --offset=i         Only offset the comparison line by i.
+  --ostinato         Repeat theme as necessary to match offset.
   --show-tensions    Show all interval tensions in output.
   --transpose=i      Only transpose comparison line by i.
   --verbose          Show noise from lilypond, MIDI player.
@@ -176,6 +215,17 @@ END_HELP
   exit 64;
 }
 
+sub risposta {
+  my ( $theme, $do_invert, $transpose_by ) = @_;
+  my @risposta = $do_invert ? canonic_inverse($theme) : @$theme;
+  if ( $transpose_by != 0 ) {
+    for my $p (@risposta) {
+      $p += $transpose_by if defined $p;
+    }
+  }
+  return @risposta;
+}
+
 # $sd = standard_deviation_data(\@array) computes the standard
 # deviation of an array of numbers.
 sub standard_deviation {
@@ -187,6 +237,8 @@ sub standard_deviation {
 
 sub tension {
   my ( $p1, $p2 ) = @_;
+  return if !defined $p1 or !defined $p2;
+
   my $interval = abs( $p2 - $p1 );
   my $octave   = int( $interval / $atu->scale_degrees );
 
@@ -194,6 +246,11 @@ sub tension {
     $tensions{ $interval % $atu->scale_degrees } +
     ( $octave > 0 ? $octave_adjust : 0 );
   $tension = 0 if $tension < 0;
+
+  if ($Flag_Verbose) {
+    my ( $n1, $n2 ) = @{ $atu->pitches2notes( [ $p1, $p2 ] ) };
+    warn "compare $n1 vs $n2 ($p1 vs $p2) tension $tension\n";
+  }
 
   return $tension;
 }
