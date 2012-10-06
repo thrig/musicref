@@ -6,7 +6,12 @@ or something like the calculation proposed in "Fractals in Music",
 Charles Madden, p.65-66. There are durations with low divergence from
 phi (less than 0.05% error), such as measures 34, 89 (prime), and 136
 (both it and its golden section evenly divisible by four) that would
-likely suit music based on the golden section.
+likely suit music based on the golden section. (Measure 868 is the first
+whose golden section in turn has a golden section, both within a
+tolerance of 1/1869. 868:536:331 would likely only suit a large-scale
+work, as playing at a measure per second, the work would span just under
+29 minutes. Perhaps 536(331), 331, 868((331)536) for three sonata form
+movements (plus internal GS divisions)?)
 
 measure 0001 gs 000 delta 0.6180
 measure 0002 gs 001 delta 0.1180
