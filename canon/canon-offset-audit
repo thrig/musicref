@@ -19,6 +19,9 @@
 # minor 3rds or what else a particular combination has. (Or lilypond
 # output, to generate music for all the combinations, with intervals
 # labelled.)
+#
+# Obtain semitone numbers via the following lilypond include:
+#   \include "event-listener.ly"
 
 use strict;
 use warnings;
