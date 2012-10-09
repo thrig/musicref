@@ -1,0 +1,43 @@
+Modes of Limited Transposition
+
+mode 1 (two transpositions, one mode)
+
+<c d e fis gis ais c>
+[0,2,4,6,8]
+040402
+
+mode 2 (three transpositions, two modes)
+
+<c des ees e ges g a bes c>
+[0,1,3,4,6,7,9,10]
+448444
+
+mode 3 (four transpositions, three modes)
+
+<c d ees e ges g aes bes b c>
+[0,1,2,4,5,6,8,9,10]
+666963
+
+mode 4 (six transpositions, four modes)
+
+<c des d f ges g aes b c>
+[0,1,2,3,6,7,8,9]
+644464
+
+mode 5 (six transpositions, three modes)
+
+<c des f ges g b c>
+[0,1,2,6,7,8]
+420243
+
+mode 6 (six transpositions, four modes)
+
+<c d e f fis gis ais b c>
+[0,1,2,4,6,7,8,10]
+464644
+
+mode 7 (six transpositions, five modes)
+
+<c des d ees f ges g aes a b c>
+[0,1,2,3,4,6,7,8,9,10]
+888885
