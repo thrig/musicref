@@ -1,4 +1,5 @@
-ForteN  PCS                     ICC             AvgT   MinT  MaxT
+#ForteN  PCS                     ICC             AvgT   MinT  MaxT
+# Via Music::Tension::Cope pcs() as of Oct 2012
 3-11	0,3,7           	001110  	0.175  0.100 0.225
 3-12	0,4,8           	000300  	0.225  0.200 0.275
 4-17	0,3,4,7         	102210  	0.325  0.100 1.000
