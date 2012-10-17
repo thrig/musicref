@@ -14,8 +14,6 @@
 # consonant combination. (must then figure out lowest pitch, calculate
 # other tensions up from that one)
 #
-# TODO offset, transpose should accept lists or ranges of values.
-#
 # TODO interval histograms (via R?) would be nice, so can see how many
 # minor 3rds or what else a particular combination has. (Or lilypond
 # output, to generate music for all the combinations, with intervals
@@ -31,14 +29,15 @@ use Getopt::Long qw(GetOptions);
 use List::Util qw(max min sum);
 use Music::AtonalUtil    ();
 use Music::Tension::Cope ();
+use Parse::Range qw(parse_range);
 
 GetOptions(
   'help'          => \&print_help,
   'inverse'       => \my $Flag_Inverse,
-  'offset=i'      => \my $Flag_Offset,
+  'offset=s'      => \my $Flag_Offset,
   'ostinato'      => \my $Flag_Ostinato,
   'show-tensions' => \my $Flag_Show_Tensions,
-  'transpose=i'   => \my $Flag_Transpose,
+  'transpose=s'   => \my $Flag_Transpose,
   'verbose'       => \my $Flag_Verbose,
 ) or print_help();
 
@@ -66,19 +65,21 @@ my $max_offset    = min( int( @$Theme / 2 ), 4 );
 my $min_transpose = -19;
 my $max_transpose = 19;
 
+my @offsets;
 if ( defined $Flag_Offset ) {
-  die
-    "offset must be positive integer (and ideally less than length of theme)\n"
-    if $Flag_Offset < 0
-      or $Flag_Offset >= @$Theme;
-  $min_offset = $max_offset = $Flag_Offset;
+  @offsets = parse_range($Flag_Offset);
+} else {
+  @offsets = $min_offset .. $max_offset;
 }
+my @transposes;
 if ( defined $Flag_Transpose ) {
-  $min_transpose = $max_transpose = $Flag_Transpose;
+  @transposes = parse_range($Flag_Transpose);
+} else {
+  @transposes = $min_transpose .. $max_transpose;
 }
 
-for my $offset ( $min_offset .. $max_offset ) {
-  for my $transpose ( $min_transpose .. $max_transpose ) {
+for my $offset (@offsets) {
+  for my $transpose (@transposes) {
     my @theme_proposta = @$Theme;
     my @theme_risposta = risposta( $Theme, $Flag_Inverse, $transpose );
     if ( $offset > 0 ) {
