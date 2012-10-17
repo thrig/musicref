@@ -9,9 +9,10 @@
 # TODO support rhythm (Cope has equations and advice on this on
 # subsequent pages to what used below).
 #
-# TODO also multiple lines against each other, as adding a 3rd or 4th
-# line may change what offsets and transpositions create the overall
-# most consonant combination.
+# TODO multiple lines against each other, as adding a 3rd or 4th line
+# may change what offsets and transpositions create the overall most
+# consonant combination. (must then figure out lowest pitch, calculate
+# other tensions up from that one)
 #
 # TODO offset, transpose should accept lists or ranges of values.
 #
@@ -28,7 +29,8 @@ use warnings;
 
 use Getopt::Long qw(GetOptions);
 use List::Util qw(max min sum);
-use Music::AtonalUtil ();
+use Music::AtonalUtil    ();
+use Music::Tension::Cope ();
 
 GetOptions(
   'help'          => \&print_help,
@@ -38,26 +40,7 @@ GetOptions(
   'show-tensions' => \my $Flag_Show_Tensions,
   'transpose=i'   => \my $Flag_Transpose,
   'verbose'       => \my $Flag_Verbose,
-) || print_help();
-
-# Interval tentions taken from "Computer Models of Musical Creativity",
-# Cope, p.229-230, from least tension (0.0) to greatest (1.0).
-my %tensions = (
-  0  => 0.0,
-  1  => 1.0,
-  2  => 0.8,
-  3  => 0.225,
-  4  => 0.2,
-  5  => 0.55,
-  6  => 0.65,
-  7  => 0.1,
-  8  => 0.275,
-  9  => 0.25,
-  10 => 0.7,
-  11 => 0.9,
-);
-# Intervals greater than octave more consonant by virtue of spread
-my $octave_adjust = -0.02;
+) or print_help();
 
 ########################################################################
 #
@@ -65,7 +48,8 @@ my $octave_adjust = -0.02;
 
 print_help() unless @ARGV;
 
-my $atu = Music::AtonalUtil->new;
+my $atu     = Music::AtonalUtil->new;
+my $tension = Music::Tension::Cope->new;
 
 my $Theme;
 # Assume semitone pitch numbers, else try to convert note names to such.
@@ -117,9 +101,10 @@ for my $offset ( $min_offset .. $max_offset ) {
 
     my @tensions;
     for my $i ( 0 .. $#theme_proposta ) {
-      push @tensions, tension( $theme_proposta[$i], $theme_risposta[$i] );
+      next if !defined $theme_proposta[$i] or !defined $theme_risposta[$i];
+      push @tensions,
+        $tension->pitches( $theme_proposta[$i], $theme_risposta[$i] );
     }
-
     die "no tension\n" unless @tensions;
 
     my $max     = max(@tensions);
@@ -236,24 +221,4 @@ sub standard_deviation {
   my $mean = shift || mean($arrayref);
 
   return sqrt( mean( [ map ( ( $_ - $mean )**2, @$arrayref ) ] ) );
-}
-
-sub tension {
-  my ( $p1, $p2 ) = @_;
-  return if !defined $p1 or !defined $p2;
-
-  my $interval = abs( $p2 - $p1 );
-  my $octave   = int( $interval / $atu->scale_degrees );
-
-  my $tension =
-    $tensions{ $interval % $atu->scale_degrees } +
-    ( $octave > 0 ? $octave_adjust : 0 );
-  $tension = 0 if $tension < 0;
-
-  if ($Flag_Verbose) {
-    my ( $n1, $n2 ) = @{ $atu->pitches2notes( [ $p1, $p2 ] ) };
-    warn "compare $n1 vs $n2 ($p1 vs $p2) tension $tension\n";
-  }
-
-  return $tension;
 }
