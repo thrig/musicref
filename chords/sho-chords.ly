@@ -1,5 +1,5 @@
-% Derived from wikipedia image of the various chords, plus atonal foo
-% that shows two major groupings.
+% Derived from wikipedia image of the various chords. These are "aitake"
+% or tone clusters. Atonally the pitch sets are:
 %
 % [0,2,4,7,9] most prevelant (5 of 11), plus is subset of [0,2,4,5,7,9]
 % [0,2,4,5,7,9]
@@ -10,6 +10,16 @@
 % [0,1,3,5,6,8] this similar to previous
 %
 % [0,2,5,7] - subset of Ju (ii)
+%
+% These clusters are moved between such that the fundamental of the
+% previous cluster is last to sound, and the new fundamental of the new
+% cluster is first to sound, as the player moves fingers around the SHO
+% instrument; better players will use a variety of motions (slide,
+% hover, etc) to better accent the transitions. However, musical
+% examples show more complexity than simple first-in, last-out
+% execution of the fundamentals. Some clusters are awkward to execute.
+% (Source: "Music of a Thousand Autumns", Robert Garfias, 1975, p.47-
+% 48. ISBN 0-520-01977-6)
 
 \version "2.14.0"
 
