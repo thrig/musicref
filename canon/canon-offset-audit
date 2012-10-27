@@ -27,7 +27,7 @@ use warnings;
 
 use Getopt::Long qw(GetOptions);
 use List::Util qw(max min sum);
-use Music::AtonalUtil    ();
+use Music::LilyPondUtil  ();
 use Music::Tension::Cope ();
 use Parse::Range qw(parse_range);
 
@@ -47,17 +47,21 @@ GetOptions(
 
 print_help() unless @ARGV;
 
-my $atu     = Music::AtonalUtil->new;
+my $lyu     = Music::LilyPondUtil->new;
 my $tension = Music::Tension::Cope->new;
 
 my $Theme;
 # Assume semitone pitch numbers, else try to convert note names to such.
 # (Notes in particular do not (yet) support registers, so must use
 # semitone pitch numbers if need that.)
-if ( $ARGV[0] =~ m/^\d+/ ) {
-  $Theme = [ map { /^[rR]/ ? undef : $_ } @ARGV ];
-} else {
-  $Theme = $atu->notes2pitches( \@ARGV );
+for my $obj (@ARGV) {
+  if ( $obj =~ m/^(\d+)$/ ) {
+    push @$Theme, $1;
+  } elsif ( $obj =~ m/^[rR]$/ ) {
+    push @$Theme, undef;
+  } else {
+    push @$Theme, $lyu->notes2pitches($obj);
+  }
 }
 
 my $min_offset    = 1;
