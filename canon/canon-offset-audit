@@ -124,7 +124,7 @@ for my $offset (@offsets) {
       if $Flag_Show_Tensions;
 
     printf
-      "%.03f O%d,T%d\tMin(%.03f) Max(%.03f) Mean(%.03f) SDev(%.03f)%s\n",
+      "%.03f %d %d\tMin %.03f Max %.03f Mean %.03f SDev %.03f %s\n",
       $tension, $offset,
       $transpose, $min, $max, mean( \@tensions ),
       standard_deviation( \@tensions ),
