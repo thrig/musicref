@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 #
-# Calculates Cope tension for each Forte Number.
+# Calculates Cope tension for (the prime form of) each Forte Number.
 
 use strict;
 use warnings;
