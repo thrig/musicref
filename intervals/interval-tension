@@ -1,5 +1,8 @@
 #!/usr/bin/env perl
 #
+#  /!\  See Music::Tension::Cope on CPAN for subsequent tension analysis
+#       efforts in Perl.
+#
 # Interval tension analysis, implementation based on David Cope's
 # "octave projection" of the fundamental (with ref to "The Craft of
 # Musical Composition" by Paul Hindemith in 1937) in "Computer Models of
