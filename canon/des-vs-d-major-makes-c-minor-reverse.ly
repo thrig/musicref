@@ -2,74 +2,79 @@
 
 \version "2.16.0"
 
-upper = \relative e' {
+upper = \relative e'' {
   \key des \major
   \cadenzaOn
 % why is fis/ges and then des/cis doubled in the text?
 
+
 \normalsize
-ees1^"Proposta"
-\teeny
-e
-\normalsize
-f
-\teeny
-fis
-\normalsize
-ges
-\teeny
-g
-\normalsize
-aes
-\teeny
-a
-\normalsize
-bes
-\teeny
-b
-\normalsize
-c
-des
+ees1^"Proposta (DSC)"
 \teeny
 d
 \normalsize
-ees
+des
+c
+\teeny
+b
+\normalsize
+bes
+\teeny
+a
+\normalsize
+aes
+\teeny
+g
+\normalsize
+ges
+\teeny
+fis
+\normalsize
+f
+\teeny
+e
+\normalsize
+ees1
+
   \cadenzaOff
   \bar "|"
 }
 
 
-lower = \relative e''' {
+lower = \relative e {
+  \clef bass
   \key d \major
-  \ottava #1
   \cadenzaOn
+
+
 \normalsize
-e1_"Risposta"
-\teeny
-ees
-\normalsize
-d
-\teeny
-des
-\normalsize
-cis
-\teeny
-c
-\normalsize
-b
-\teeny
-bes
-\normalsize
-a
-\teeny
-aes
-\normalsize
-g
-fis
+e1_"Risposta (ASC)"
 \teeny
 f
 \normalsize
-e
+fis
+g
+\teeny
+aes
+\normalsize
+a
+\teeny
+bes
+\normalsize
+b
+\teeny
+c
+\normalsize
+cis
+\teeny
+des
+\normalsize
+d
+\teeny
+ees
+\normalsize
+e1
+
   \cadenzaOff
   \bar "|"
 }
