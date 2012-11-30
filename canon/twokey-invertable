@@ -1,0 +1,119 @@
+#!/usr/bin/env perl
+#
+# Generate tone rows and other data for "exact two key invertable canon"
+# construction.
+
+use strict;
+use warnings;
+use feature qw/say/;
+
+use Carp qw/croak/;
+use Music::Tension::Cope ();
+use Music::LilyPondUtil  ();
+
+my $lyu = Music::LilyPondUtil->new(
+  chrome     => 'flats',
+  keep_state => 0,
+  mode       => 'absolute',
+);
+my $tension = Music::Tension::Cope->new;
+
+my $subject_start = 28 + 12;
+for my $response_start ( 3 .. 3 + 12 ) {
+
+  my @subject   = reverse $subject_start - 12 .. $subject_start;
+  my @response  = $response_start .. $response_start + 12;
+  my @intervals = intervals( \@subject, \@response );
+  my @harmonics = harmonics( \@intervals );
+  my @tensions  = tensions( \@subject, \@response );
+
+  say "P", prow2str( \@subject );
+  say "R", prow2str( \@response );
+  say "i", prow2str( \@intervals );
+  # say "t", frow2str( \@tensions );
+  say '';
+
+  say "P", nrow2str( [ $lyu->p2ly(@subject) ] );
+  say "R", nrow2str( [ $lyu->p2ly(@response) ] );
+  say "h", nrow2str( \@harmonics );
+  say '';
+  say '';
+}
+
+sub frow2str {
+  my ($row) = @_;
+  sprintf join( ' ', "% 6s" x @$row ), @$row;
+}
+
+sub prow2str {
+  my ($row) = @_;
+  sprintf join( ' ', "% 6d" x @$row ), @$row;
+}
+
+sub nrow2str {
+  my ($row) = @_;
+  sprintf join( ' ', "% 6s" x @$row ), @$row;
+}
+
+# notate intervals of harmonic significance
+sub harmonics {
+  my ($row) = @_;
+
+  my %base_intervals = (
+    0  => 'U',
+    1  => 'm2',
+    2  => 'M2',
+    3  => 'm3',
+    4  => 'M3',
+    5  => 'P4',
+    6  => 'TT',
+    7  => 'P5',
+    8  => 'm6',
+    9  => 'M6',
+    10 => 'm7',
+    11 => 'M7'
+  );
+
+  my @harmonics;
+  for my $i (@$row) {
+    my $interval_name = $base_intervals{ $i % 12 };
+    my $octave        = int( $i / 12 );
+    # NOTE disable octave as distracting in output
+    #   if ($octave) {
+    #     $octave = '+' . $octave;
+    #   } else {
+    $octave = '';
+    #   }
+    push @harmonics, $interval_name . $octave;
+  }
+  return @harmonics;
+}
+
+# exact interval in semitones, not the canonic tricky one that counts
+# unison as 1, then 2, 3, etc for diatonics, -2, -3, etc below, 8, 15
+# for octaves, and the like -- do not know how chromatics fit into the
+# diatonic numbering scheme, besides simply being a corresponding step
+# in the other tone row.
+sub intervals {
+  my ( $row1, $row2 ) = @_;
+  # as would have to undef or otherwise skip the missing bits
+  croak "tone rows of different sizes not supported" if @$row1 != @$row2;
+
+  my @intervals;
+  for my $i ( 0 .. $#$row1 ) {
+    $intervals[$i] = $row2->[$i] - $row1->[$i];
+  }
+  return @intervals;
+}
+
+sub tensions {
+  my ( $row1, $row2 ) = @_;
+  # as would have to undef or otherwise skip the missing bits
+  croak "tone rows of different sizes not supported" if @$row1 != @$row2;
+
+  my @tensions;
+  for my $i ( 0 .. $#$row1 ) {
+    $tensions[$i] = $tension->pitches( $row1->[$i], $row2->[$i] );
+  }
+  return @tensions;
+}
