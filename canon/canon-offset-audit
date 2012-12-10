@@ -9,60 +9,45 @@
 # TODO support rhythm (Cope has equations and advice on this on
 # subsequent pages to what used below).
 #
-# TODO multiple lines against each other, as adding a 3rd or 4th line
-# may change what offsets and transpositions create the overall most
-# consonant combination. (must then figure out lowest pitch, calculate
-# other tensions up from that one)
+# TODO also multiple lines against each other, as adding a 3rd or 4th
+# line may change what offsets and transpositions create the overall
+# most consonant combination.
 #
 # TODO interval histograms (via R?) would be nice, so can see how many
 # minor 3rds or what else a particular combination has. (Or lilypond
 # output, to generate music for all the combinations, with intervals
 # labelled.)
-#
-# Obtain semitone numbers via the following lilypond include:
-#   \include "event-listener.ly"
 
 use strict;
 use warnings;
 
-use Getopt::Long qw(GetOptions);
-use List::Util qw(max min sum);
+use Getopt::Long qw/GetOptions/;
+use List::Util qw/max min sum/;
 use Music::LilyPondUtil  ();
 use Music::Tension::Cope ();
-use Parse::Range qw(parse_range);
-
-GetOptions(
-  'help'          => \&print_help,
-  'inverse'       => \my $Flag_Inverse,
-  'offset=s'      => \my $Flag_Offset,
-  'ostinato'      => \my $Flag_Ostinato,
-  'show-tensions' => \my $Flag_Show_Tensions,
-  'transpose=s'   => \my $Flag_Transpose,
-  'verbose'       => \my $Flag_Verbose,
-) or print_help();
+use Parse::Range qw/parse_range/;
 
 ########################################################################
 #
 # MAIN
+
+GetOptions(
+  'average!'       => \my $Flag_Average_Tension,
+  'help'           => \&print_help,
+  'inverse!'       => \my $Flag_Inverse,
+  'offset=s'       => \my $Flag_Offset,
+  'ostinato!'      => \my $Flag_Ostinato,
+  'show-tensions!' => \my $Flag_Show_Tensions,
+  'transpose=s'    => \my $Flag_Transpose,
+  'verbose!'       => \my $Flag_Verbose,
+) or print_help();
 
 print_help() unless @ARGV;
 
 my $lyu     = Music::LilyPondUtil->new;
 my $tension = Music::Tension::Cope->new;
 
-my $Theme;
-# Assume semitone pitch numbers, else try to convert note names to such.
-# (Notes in particular do not (yet) support registers, so must use
-# semitone pitch numbers if need that.)
-for my $obj (@ARGV) {
-  if ( $obj =~ m/^(\d+)$/ ) {
-    push @$Theme, $1;
-  } elsif ( $obj =~ m/^[rR]$/ ) {
-    push @$Theme, undef;
-  } else {
-    push @$Theme, $lyu->notes2pitches($obj);
-  }
-}
+my $Theme = [ $lyu->notes2pitches(@ARGV) ];
 
 my $min_offset    = 1;
 my $max_offset    = min( int( @$Theme / 2 ), 4 );
@@ -106,9 +91,10 @@ for my $offset (@offsets) {
 
     my @tensions;
     for my $i ( 0 .. $#theme_proposta ) {
-      next if !defined $theme_proposta[$i] or !defined $theme_risposta[$i];
-      push @tensions,
-        $tension->pitches( $theme_proposta[$i], $theme_risposta[$i] );
+      if ( defined $theme_proposta[$i] and defined $theme_risposta[$i] ) {
+        push @tensions,
+          $tension->pitches( $theme_proposta[$i], $theme_risposta[$i] );
+      }
     }
     die "no tension\n" unless @tensions;
 
@@ -116,15 +102,15 @@ for my $offset (@offsets) {
     my $min     = min(@tensions);
     my $tension = sum(@tensions);
 
-    # compensate for fewer matching notes in larger offsets
-    $tension /= @tensions;
+    # Compensate for fewer matching notes in larger offsets
+    $tension /= @tensions if $Flag_Average_Tension;
 
     my $tension_str = "";
     $tension_str = " " . join( ' ', grep defined, @tensions )
       if $Flag_Show_Tensions;
 
     printf
-      "%.03f %d %d\tMin %.03f Max %.03f Mean %.03f SDev %.03f %s\n",
+      "%.03f O%d,T%d\tMin(%.03f) Max(%.03f) Mean(%.03f) SDev(%.03f)%s\n",
       $tension, $offset,
       $transpose, $min, $max, mean( \@tensions ),
       standard_deviation( \@tensions ),
@@ -179,13 +165,15 @@ sub print_help {
   warn <<"END_HELP";
 Usage: $0 [options] notes or semitone numbers ...
 
+  --average          Average out the tension values over the length of
+                     matching notes..
   --help             Display this message and exit.
   --inverse          Compare theme with its inverse canonic line.
-  --offset=i         Only offset the comparison line by i.
+  --offset=s         Range of offsets.
   --ostinato         Repeat theme as necessary to match offset.
   --show-tensions    Show all interval tensions in output.
-  --transpose=i      Only transpose comparison line by i.
-  --verbose          Show noise from lilypond, MIDI player.
+  --transpose=s      Range of transpositions.
+  --verbose          More noise.
 
 Example Usage:
   $0 c g a e f c f g | sort -n
