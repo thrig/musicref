@@ -26,7 +26,7 @@ b!
 lower = \relative c''' {
   \cadenzaOn
 
-cis!1_"Resposta"
+cis!1_"Risposta"
 c!
 b!
 ais!
