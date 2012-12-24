@@ -5,7 +5,7 @@
 
 \header {
   title       = "Contrary Canon via Mixolydian Conversion"
-  subsubtitle = "2012-12-23"
+  subsubtitle = "2012-12-24"
   composer    = "Jeremy Mates"
   copyright   = "© 2012 Creative Commons Attribution 3.0 United States License"
   tagline     = ##f
@@ -34,8 +34,8 @@ voicetwo = \relative g {
   \keytempoetc
   \clef alto
 
-  g2.
-  a2.
+  c2.
+  aes2.
   d2.
   d2.
   e2.
