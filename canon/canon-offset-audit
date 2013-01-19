@@ -17,6 +17,8 @@
 # minor 3rds or what else a particular combination has. (Or lilypond
 # output, to generate music for all the combinations, with intervals
 # labelled.)
+#
+# TODO update to use Music::Canon.
 
 use strict;
 use warnings;
