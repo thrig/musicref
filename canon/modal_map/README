@@ -1,0 +1,3 @@
+Example uses of the modal_map method of the Music::Canon perl module to
+convert a melody to other scales or modes or arbitrary interval
+sequences.
