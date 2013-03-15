@@ -7,7 +7,7 @@
 \score {
   \new Staff << \relative e' {
      \cadenzaOn
-     <c e g>
+     <c e g>2
      <d e g>^"III2?"
      \bar "|"
      <c e g>
