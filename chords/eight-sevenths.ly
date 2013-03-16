@@ -1,12 +1,14 @@
+% TODO broken under 2.16, 2.14 can render it, le sigh.
+
 \version "2.12.0"
 
 \header {
-% title = "set of quatrads by {3,4} semitone intervals"
-% subtitle = "(some of which are called 7ths)"
+  title = "set of quatrads by {3,4} semitone intervals"
+  subtitle = "(some of which are called 7ths)"
 }
 
 \paper {
-  #(set-paper-size "a6")
+% #(set-paper-size "a6")
 }
 
 upper = \relative c' {
