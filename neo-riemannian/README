@@ -10,3 +10,5 @@ held invarient when computing the links. Some pointers:
  * fn3-6.invary2.png - compare with 3-11
  * fn4-27.invary2.png (sevenths (well, some of them, anyways))
  * fn4-27.invary3.png - too many invarient pitches, nothing to do!
+ * intervals/modes-of-limited-transposition of this repository are
+   interesting when run through eg/nrt-study-setclass: zero linkages.
