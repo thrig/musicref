@@ -1,0 +1,12 @@
+https://en.wikipedia.org/wiki/Neo-Riemannian_theory
+
+See also the Music::NeoRiemannianTonnetz module on CPAN, in particular
+the eg/nrt-study-setclass program in the distribution of that module.
+
+For the PNG, "fn" is the forte number, and invaryN how many pitches were
+held invarient when computing the links. Some pointers:
+
+ * fn3-11.invary2.png (major, minor triads)
+ * fn3-6.invary2.png - compare with 3-11
+ * fn4-27.invary2.png (sevenths (well, some of them, anyways))
+ * fn4-27.invary3.png - too many invarient pitches, nothing to do!
