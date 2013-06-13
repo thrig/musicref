@@ -1,0 +1,147 @@
+Notes taken on "Fundamental Counterpoint" by Hugo Norden
+
+Intervals allowed:
+
+ * Ma/mi 2nd, up or down, 
+ * Ma/mi 3rd, up or down
+ * P4, up or down
+ * Diminished 5th, up or down (and ideally reverse motion step compensated)
+ * P5, up or down
+ * Minor 6th, up or down.
+ * Octave, up or down.
+
+Intervals *not* allowed:
+
+ * Major 6th, up or down
+ * Ma/mi 7th, up or down
+ * All diminished or augmented intervals besides dim. 5th.
+ * All intervals >8va
+
+Sequential motion in same direction not allowed when the notes outline:
+
+ * Augmented 4th (either direction), e.g. f1 g b
+ * Ma/mi 7th (either dir.) e.g. e a d
+ * Ma/mi 9th (")
+
+Following combinations of three sequential moves in same direction not
+permitted:
+
+ * Ma/mi 3rds in any combination, as these would outline a 7th
+ * Ma 2nds if run outlines a Aug. 4th (e.g. ... g -> f g a b <- a ...);
+   however, okay if run does not outline aug. 4th by not changing
+   direction, e.g. g -> f g a b c <-
+
+Normal range of contrapuntal melody is one octave, but can dip outside
+by one note on either side. (10th)
+
+
+1st species rules (two voices)
+
+* Unison, Mm3, P5, Mm6, 8va allowed
+* ... except Unison only in 1st/last measure
+* 3rd, 5th, 6th, 8th may be expanded by octave (compound 
+  intervals) - 10, 12, 13, 15 or 3+8, 5+8, 6+8, 8+8, but using the
+  music funny -1 math.
+* However, large intervals are dubious, or should only be used 
+  sparingly. 
+* Voices are allowed to cross (then the interval would be, say, 5, -3, 6
+  for <a e'> <f' d> <b, g'>) if this improves the melody, and the 
+  crossing is done via contrary motion. Use sparingly to avoid confusing
+  the lines.
+* Overlapping not permitted, e.g. when lower voice moves in same 
+  direction as upper to a higher note than the preceding note in the
+  upper voice.
+* No motion in same direction to Unison, 5th, 8va. (direct)
+* Consecutive 5ths, 8ths forbidden.
+* C.F. allows U, 5th, 8th start above, but only U, 8th if other
+  voice is below.
+* One cadence formula available: 6 to 8, or 3 to U intervals.
+* Cross relations (diagonal augmented 4th) forbidden -- hmm, but only
+  when intervals are 3,3 or 5,3 or 3,5, and nowhere else?
+* >3 3rds or 6ths not permitted in sucession, as these weaken the
+  counterpoint due to repeated similar motion.
+
+* Many more traps in minor from above rules (two dim. 5ths, aug. 5th,
+  dim. 4th) due to sharpening of VI VII possible in minor.
+* "Higher level" forms from literal imitation (likely at offset),
+  retrograde imitation, contrary motion, contrary motion and retrograde,
+  palindromes in the voices. Imitation/retrograde might be used later in
+  the same voice, e.g. pattern A in C.F., imitated in the new voice,
+  then done with retrograde later in new voice, assuming the C.F. allows.
+
+
+2nd Species
+
+* Four allowed dischords:
+  1. On the downbeat as descending passing note between two concords -
+     10 in upbeat of previous measure, then 7 on downbeat, 6 on upbeat.
+  2. On the upbeat as ascending passing note (e.g. 3-4-6 intervals).
+  3. On the upbeat as descending passing note (8-7-3).
+  4. On the upbeat as a downward aux. note. 10-9-6; c b c.
+* Discords are Ma/mi 2nd, P4, Ma/mi 7th, all dim. & aug. intervals (what
+  happened to the major 6th? or is that considered aug.?)
+* Therefore concords to be connected melodically must be 3rd apart or on
+  same note, and all accented (downbeat) discords must come in
+  descending scale line.
+* Unison (apart from ending) may now occur on downbeat, and ideally by a
+  leap, to avoid descending passing 2-1 progression. (But no rule
+  against such.)
+* 2nd species response begins after 1/2 rest.
+* Same cadential formula as from 1st species.
+* :( missing p.28-29						TODO
+* Discords must be approached and departed by a step.
+* Discords in minor can be problematic, e.g. #VII-#VI-#VII only
+  possibility (which Schoenberg would frown on, as he never had #VII to
+  #VI as allowed to begin with).
+* #VI may be used as ASC discord, but only on upbeat.
+
+3rd Species
+
+* First beat must not be discord nor unison; except unison as previously
+  is allowed in ultimate measure.
+* First beat of first measure must be rest.
+* Discord rules for 3rd quarter note same as for downbeat half note in
+  2nd species; 2nd and 4th qn as for the upbeat rules from 2nd species.
+  excepting the ultimate qn in the penultimate measure, where cadence
+  rules take effect.
+* First note of counterpoint must be conchord, however (2nd quarter note
+  in 1st measure of the response line).
+* Additionally, "Note Cambiata" allowed (but not beginning on leading-
+  tone, as would outline tritone). << { a4 g e f g ... } // { d1 e } >> or
+  << { a1 g } // { c,4 b g a b ... } >>
+* Additionally, "changing notes" allowed to ascend by 2nd from 1st beat
+  of measure M to 1st beat of M+1. << { e4 f d e f ... } // { c1 ... }
+* Additionally, "descending four note scalewise passage" allowed,
+  subsequent measure will need to step down (5th) or up (3rd) to create
+  one or the other larger-scale motion.
+* Incorrect placements of consecutive 5th or 8va can occur between beats
+  1:1, 2:2, 3:3, 4:4, 3:1, 4:1.
+* 2:2, 3:3, 4:4 with consecutive unisons would also be an error.
+* *every* measure, except first and last, *must* contain a discord (!).
+  So cannot outline a chord, or jump around on conchords.
+* However, 6-5 or 5-6 depending on accented start or not, the unaccented
+  becomes a discord. These could be aux. or passing notes, though
+  diagrams not clear to me (are all the examples on unaccented note thus
+  considered discords?).
+* Upward leap from 1st beat of measure should be avoided (as partially
+  outlines a triad?).
+* After >= 3 scalewise notes, do not leap across measure line in the
+  same direction.
+* Nine (well, eleven) cadential figures are allowed (4,5,8 of
+  questionable value) above the C.F.
+  1. << { b4 c a b c1 } // { d,1 c } >>
+  2. << { a4 g a b c1 } // { d,1 c } >>
+  3. << { f4 d c b c1 } // { d,1 c } >>
+  4. << { f4 e f b, c1 } // { d,1 c } >>
+  5. << { f4 d a b c1 } // { d,1 c } >>
+  6. << { a4 d, a b c1 } // { d,1 c } >>
+  7. << { a4 f a, b c1 } // { d,1 c } >>
+  8. << { a4 d, c b c1 } // { d,1 c } >>
+  9. << { f4 g a b c1 } // { d,1 c } >>
+  10. << { f4 d a' b c1 } // { d,1 c } >> (variation on 5)
+  11. << { a4 d, a' b c1 } // { d,1 c } >> (variation on 6)
+* 3rd species below C.F. only one additional rule: avoid a leap of
+  4th or 5th from an accented beat to an unaccented one. (Outlines a
+  6/4 chord.)
+* But leap of 4th or 5th from unaccented to accented is good.
+* With counterpoint below, only 1, 3 from above list acceptable.
