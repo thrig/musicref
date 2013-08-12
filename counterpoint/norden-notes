@@ -145,3 +145,32 @@ by one note on either side. (10th)
   6/4 chord.)
 * But leap of 4th or 5th from unaccented to accented is good.
 * With counterpoint below, only 1, 3 from above list acceptable.
+* Five harmonic effects possible in strict counterpoint:
+  1. Major triad, root pos
+  2. Minor triad, root pos
+  3. Major triad, 1st inversion
+  4. Minor triad, 1st inversion
+  5. Diminished triad, 1st inversion, and provided that root of triad
+     placed above the fifth.
+* Rate of harmonic change must be one per measure, or two per
+  measure, but only if the change occurs on the 3rd qn. (This implies
+  a rhythm of whole note, half-half, or ... half half~half half ties
+  across a measure.)
+* Implied harmony below may not always seem clear, esp. with
+  descending passing-note on 3rd beat, in which case 4th qn determines
+  the implied harmony.
+* Leaps across measure line, from best to less good - only after a leap
+  in opposite direction, after a leap in same direction, and
+  compensating for a scalewise line.
+* ASC leap after ASC leap, first should be approached from opposite
+  direction, ideally by step.
+* Leap after scalewise only possibe if scalewise downwards, and 3rd qn a
+  passing note (b). << { e4 c b a f' } // { c,1 d } >>
+* Scalewise arcs should not hit leading tone at highest, nor subdom at
+  lowest (perhaps to avoid modulatory effects?)
+* Mixing leaps and scalewise in same direction best done by placing leap
+  at beginning of passage, then stick to scalewise.
+
+4th Species
+
+
