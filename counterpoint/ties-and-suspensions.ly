@@ -210,3 +210,33 @@ Listen to these, perhaps in comparison to intervals not listed here.
   }
   \midi { }
 }
+
+\markuplist { \paragraph {
+As an example usage, consider a three-voice canon. The offset between voice introduction is two measures, and the first response a third (D.C. 3 or actually D.C. 10) above, and the second response D.C. 13 below that of the first response. These choices are largely arbitrary; experiment with other offsets. With the given offsets, calculate which suspensions are allowed: for each suspension in the first offset, calculate what suspension results in each subsequent response. (The empty measures would also need to be filled in, but are not directly relevant to seeing what suspensions result between the different voices.)
+}
+
+\score {
+  \new StaffGroup <<
+    \new Staff { \key g \minor \relative f'' { s1*2 a2^"Response 1" g s1 bes,1 s1*2 } }
+    \new Staff { \key g \minor \relative f'' { f2^"Principal" ees s1 g,1 s1*4 } }
+    \new Staff { \clef bass \key g \minor \relative b { s1*4 c2^"Response 2" bes2 s1 d,1 } }
+    \figures { \bassFigureExtendersOn
+      s1*2
+      <9>4 <9> <8>2
+      s1
+      <14>4 <14> <15>2
+    }
+  >>
+  \layout {
+    \context {
+      \Score
+      \override SpacingSpanner
+        #'base-shortest-duration = #(ly:make-moment 1 8)
+    }
+  }
+  \midi { }
+} }
+
+\markuplist { \paragraph {
+D.C. 10 permits the 9-8 suspension, though that creates a 14-15 in the bass voice, which does not appear in any of the charts above, nor as octave reduced 7-8, so would require listening to hear whether the result is acceptable. The other two D.C. 10 suspensions, 7-6 and 6-5 correspond to permitted 9-10 and 10-11 suspensions in the bass voice. Other D.C. intervals and canonic offsets will, again, offer different permitted suspensions between the resulting voices; experiment to see what is possible.
+} }
