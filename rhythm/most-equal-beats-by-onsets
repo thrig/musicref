@@ -1,0 +1,99 @@
+#!/usr/bin/env perl
+#
+# Rhythm thingy based on a reading of "Computational geometric aspects of
+# rhythm, melody, and voice-leading" by Godfried Toussaint in particular
+# linear-regression-evenness of various numbers of onsets per measure.
+#
+# Other ideas would be to try out different functions instead of a line, e.g.
+# to project the vertical onto maybe a sphere or cylinder or suchlike...
+
+use strict;
+use warnings;
+
+use POSIX qw/floor ceil/;
+
+# Beats per measure
+my $BPM = 16;
+
+# Line is from x=0, y=1 to x=$BPM, y=$mod+1 then from that for each $y from
+# 1..$mod figure out the x value to see where beat would be.
+my $intercept = 1;
+
+measure_marker();
+
+for my $mod ( 2 .. $BPM - 1 ) {
+  # y = mx + b; b is 1 as we're drawing the intercept through that point, and
+  # then (y2-y1)/(x2-x1) reduces to just:
+  my $slope = $mod / $BPM;
+
+  my @onsets = ('.') x $BPM;
+  for my $y ( 1 .. $mod ) {
+    # solve x = (y-b)/m rounding nearest and put the beat there
+    $onsets[ sprintf "%.0f", ( $y - $intercept ) / $slope ] = 'x';
+  }
+  printf "%02d  @onsets\n", $mod;
+}
+
+print "\nAnd again with split beats where line lies between the two beats:\n\n";
+
+measure_marker();
+
+for my $mod ( 2 .. $BPM - 1 ) {
+  my $slope = $mod / $BPM;
+
+  my @onsets = ('.') x $BPM;
+  for my $y ( 1 .. $mod ) {
+    my $x = sprintf( "%0.0f", ( ( $y - $intercept ) / $slope ) / 0.5 ) * 0.5;
+    if ( $x =~ m/\.5/ ) {
+      @onsets[ floor($x), ceil($x) ] = ('y') x 2;
+    } else {
+      $onsets[ sprintf "%.0f", ( $y - $intercept ) / $slope ] = 'x';
+    }
+  }
+  printf "%02d  @onsets\n", $mod;
+}
+
+sub measure_marker {
+  print "    0       4       8      12\n";
+  print "    +-------+-------+-------+------\n";
+}
+
+__DATA__
+
+Results, for ref:
+
+    0       4       8      12
+    +-------+-------+-------+------
+02  x . . . . . . . x . . . . . . .
+03  x . . . . x . . . . . x . . . .
+04  x . . . x . . . x . . . x . . .
+05  x . . x . . x . . . x . . x . .
+06  x . . x . x . . x . . x . x . .
+07  x . x . . x . x . x . x . . x .
+08  x . x . x . x . x . x . x . x .
+09  x . x . x x . x . x . x x . x .
+10  x . x x . x x . x . x x . x x .
+11  x x . x x . x x . x x . x x . x
+12  x x . x x x . x x x . x x x . x
+13  x x x . x x x x . x x x x . x x
+14  x x x x . x x x x x x x . x x x
+15  x x x x x x x x . x x x x x x x
+
+And again with split beats where line lies between the two beats:
+
+    0       4       8      12
+    +-------+-------+-------+------
+02  x . . . . . . . x . . . . . . .
+03  x . . . . y y . . . y y . . . .
+04  x . . . x . . . x . . . x . . .
+05  x . . x . . y y . y y . . x . .
+06  x . y y . y y . x . y y . y y .
+07  x . y y y y . x . x . y y y y .
+08  x . x . x . x . x . x . x . x .
+09  x . x y y y y x . x y y y y x .
+10  x y y x . x y y x y y x . x y y
+11  x y y x y y x y y y x y y x y y
+12  x y y y x y y y x y y y x y y y
+13  x x y y y x x y y y x x y y y x
+14  x x y y y y y x x x y y y y y x
+15  x x x x y y y y y y y y y x x x
