@@ -1,0 +1,36 @@
+Consider four adjacent intervals, where there is one semitone (S) and
+three whole tones (T). The possibilities are:
+
+  STTT    c des ees f   g
+  TSTT    c d   ees f   g
+  TTST    c d   e   f   g
+  TTTS    c d   e   fis g
+
+These can be joined with another unit either in a disjunct or conjunct
+fashion; disjunct merely appends another unit (so, STTTSTTT) while with
+conjunct there is an overlap between the units:
+
+    STTT
+  +    TSTT
+    -------
+  = STTTSTT
+
+The possible single-note conjunct thus consist of:
+
+  STTTSTT e f g a b c d e        phrygian
+  STTTTST e f g a b cis d e      phrygian to minor on VII?
+  STTTTTS e f g a b cis dis e    phrygian up to major (melodic phy?)
+
+  TSTTSTT c d ees f g aes bes c  minor
+  TSTTTST c d ees f g a bes c    dorian
+  TSTTTTS c d ees f g a b c      melodic minor
+
+  TTSTSTT c d e f g aes bes c    minor (raised III) or melodic major down to V
+  TTSTTST c d e f g a bes c      major from V (or minor on VII)
+  TTSTTTS c d e f g a b c        major
+
+  TTTSTTT f g a b c d e fis      lydian (perfect IV)
+
+Other scales could be constructed by allowing for more than one note of
+overlap between the conjunct sets; what the disjunct permutations map
+out to may also be interesting.
