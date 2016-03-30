@@ -1,0 +1,81 @@
+#!/usr/bin/env perl
+#
+# Investigate (directly) shared chords between different scales,
+# possibly related to modulation.
+
+use 5.14.0;
+use warnings;
+use Music::Scales ();
+
+# here, minor plus the neapolitan chord
+my $from_mode = 'minor';
+my $to_mode   = 'minor';
+my $from =
+  lookup_table( chord_cat( triads_of( $from_mode, 0 ), [ [qw/1 5 8/] ] ) );
+
+for my $transpose ( 1 .. 11 ) {
+  say "Transpose 0 -> $transpose ($from_mode to $to_mode)";
+  my $to = lookup_table(
+    transpose_chords(
+      $transpose, chord_cat( triads_of( $to_mode, 0 ), [ [qw/1 5 8/] ] )
+    )
+  );
+  for my $c ( keys %$from ) {
+    if ( exists $to->{$c} ) {
+      say "shared: ", join ",", @{ $to->{$c} };
+    }
+  }
+}
+
+# a unique ID for a chord, "0,3,7" or such
+sub chord_id {
+  return join ",", sort { $a <=> $b } @{ $_[0] };
+}
+
+# merges [ [...],[...] ] chord lists together, without dups
+sub chord_cat {
+  my @chords;
+  my %seen;
+  for my $chordlist (@_) {
+    for my $chord (@$chordlist) {
+      push @chords, $chord unless $seen{ chord_id($chord) }++;
+    }
+  }
+  return \@chords;
+}
+
+# make a hash from a chord list
+sub lookup_table {
+  my ($chords) = @_;
+  my %table;
+  for my $chord (@$chords) {
+    $table{ chord_id($chord) } = $chord;
+  }
+  return \%table;
+}
+
+# Expects a list of array references (as returned by e.g. chords_of) and
+# transposes them by the given number of semitones. Example:
+#   transpose_chords( 10, triads_of('minor', 0) )
+# would return the chords of B-flat Minor.
+sub transpose_chords {
+  my ( $t, $chords ) = @_;
+  my @transposed;
+  for my $chord (@$chords) {
+    push @transposed, [ map { ( $t + $_ ) % 12 } @$chord ];
+  }
+  return \@transposed;
+}
+
+# Obtains the triads of a particular scale (or mode, see Music::Scales)
+# starting at pitch number zero. Note that for descending scales, the
+# chords will be listed in the opposite order as for an ascending scale.
+sub triads_of {
+  my ( $scale_name, $is_dsc ) = @_;
+  my @offsets = Music::Scales::get_scale_nums( $scale_name, $is_dsc );
+  my @chords;
+  for my $i ( 0 .. $#offsets ) {
+    push @chords, [ map { $offsets[ ( $i + $_ ) % @offsets ] } qw/0 2 4/ ];
+  }
+  return \@chords;
+}
