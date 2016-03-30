@@ -8,10 +8,10 @@
 upper = \relative c' {
   \tempo 4=120
 
-  \repeat unfold 8 { c8 c c c } c8 r8 r2.
-  \repeat unfold 8 { c8. r16 c8 c } c8 r8 r2.
-  \repeat unfold 8 { c16 c8. r16 c8 } c8 r8 r2.
-  \repeat unfold 8 { c16 c8 r16 c8 c } c8 r8 r2.
+  \repeat unfold 8 { c8\f c\mp c c } c8 r8 r2.
+  \repeat unfold 8 { c8.\f r16 c8\mp c } c8 r8 r2.
+  \repeat unfold 8 { c16\f c8.\mp r16 c8 } c8 r8 r2.
+  \repeat unfold 8 { c16\f c8\mp r16 c8 c } c8 r8 r2.
 }
 
 \score {
