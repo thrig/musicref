@@ -41,8 +41,12 @@ for my $transpose ( 0 .. 11 ) {
 }
 
 for my $keylist (values %chordkeys) {
-  next if @$keylist < 2;
-  say "  ", join(" -> ", map { qq{"$_"} } @$keylist), ";";
+  while (@$keylist > 1) {
+    my $first = shift @$keylist;
+    for my $next (@$keylist) {
+      say "  ", join(" -> ", map { qq{"$_"} } $first, $next), ";";
+    }
+  }
 }
 
 say "}";
