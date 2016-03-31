@@ -3,9 +3,10 @@
 # Visualize how chords are connected between different (minor) scales
 # via graphviz.
 #
-#   perl connectedchords > x; circo -Tpdf x -o connectedchords.pdf
+#   perl connectedkeys > x; circo -Tpdf x -o connectedkeys.pdf
 #
-# Notably, the diminished triad is unique to a given key.
+# (This is much like ../chords/connected* only not showing the chords,
+# and instead how the keys fit together by shared chords.)
 
 use 5.14.0;
 use warnings;
@@ -26,15 +27,22 @@ my %p2n = (
   11 => 'B',
 );
 
-say "digraph connectedchords {";
+say "digraph connectedkeys {";
+
+my %chordkeys;
 
 my $mode = 'minor';
 for my $transpose ( 0 .. 11 ) {
   my $chordlist =
     transpose_chords( $transpose, triads_of( $mode, 0 ) );
   for my $c (@$chordlist) {
-    say "  \"$p2n{$transpose}-$mode\" -> \"", chord_notes($c), "\";";
+    push @{ $chordkeys{ chord_id($c) } }, "$p2n{$transpose}-$mode";
   }
+}
+
+for my $keylist (values %chordkeys) {
+  next if @$keylist < 2;
+  say "  ", join(" -> ", map { qq{"$_"} } @$keylist), ";";
 }
 
 say "}";
