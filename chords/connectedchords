@@ -1,0 +1,93 @@
+#!/usr/bin/env perl
+#
+# Visualize how chords are connected between different (minor) scales
+# via graphviz.
+#
+#   perl connectedchords > x; circo -Tpdf x -o connectedchords.pdf
+#
+# Notably, the diminished triad is unique to a given key.
+
+use 5.14.0;
+use warnings;
+use Music::Scales ();
+
+my %p2n = (
+  0 => 'C',
+  1 => 'C#',
+  2 => 'D',
+  3 => 'Eb',
+  4 => 'E',
+  5 => 'F',
+  6 => 'F#',
+  7 => 'G',
+  8 => 'G#',
+  9 => 'A',
+  10 => 'Bb',
+  11 => 'B',
+);
+
+print "digraph connectedchords {\n";
+
+my $mode = 'minor';
+for my $transpose ( 0 .. 11 ) {
+  my $chordlist =
+    transpose_chords( $transpose, triads_of( $mode, 0 ) );
+  for my $c (@$chordlist) {
+    print "  \"$p2n{$transpose}-$mode\" -> \"", chord_notes($c), "\";\n";
+  }
+}
+
+print "}\n";
+
+sub chord_notes {
+  return join " ", map { $p2n{$_} } @{ $_[0] };
+}
+
+# a unique ID for a chord, "0,3,7" or such
+sub chord_id {
+  return join ",", sort { $a <=> $b } @{ $_[0] };
+}
+
+# merges [ [...],[...] ] chord lists together, without dups
+sub chord_cat {
+  my @chords;
+  my %seen;
+  for my $chordlist (@_) {
+    for my $chord (@$chordlist) {
+      push @chords, $chord unless $seen{ chord_id($chord) }++;
+    }
+  }
+  return \@chords;
+}
+
+# make a hash from a chord list
+sub lookup_table {
+  my ($chords) = @_;
+  my %table;
+  for my $chord (@$chords) {
+    $table{ chord_id($chord) } = $chord;
+  }
+  return \%table;
+}
+
+sub transpose_chords {
+  my ( $t, $chords ) = @_;
+  my @transposed;
+  for my $chord (@$chords) {
+    push @transposed, [ map { ( $t + $_ ) % 12 } @$chord ];
+  }
+  return \@transposed;
+}
+
+# Obtains the triads of a particular scale (or mode, see Music::Scales)
+# starting at pitch number zero. Note that for descending scales, the
+# chords will be listed in the opposite order as for an ascending scale.
+sub triads_of {
+  my ( $scale_name, $is_dsc ) = @_;
+  my @offsets = Music::Scales::get_scale_nums( $scale_name, $is_dsc );
+  my @chords;
+  for my $i ( 0 .. $#offsets ) {
+    push @chords, [ map { $offsets[ ( $i + $_ ) % @offsets ] } qw/0 2 4/ ];
+  }
+  return \@chords;
+}
