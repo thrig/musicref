@@ -2,4 +2,4 @@ all:
 	lilypond *.ly
 
 clean:
-	-rm *.midi *.pdf
+	-rm *.midi *.pdf durcalc-temp*
