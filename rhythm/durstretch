@@ -1,0 +1,60 @@
+#!/usr/bin/env perl
+#
+#  "If we start with a trochaic rhythm and gradually increase the
+#  interval after the louder sound, we arrive at an iambic rhythm"
+#    -- "Emotion and Meaning in Music" p.107.
+#
+# or likewise for other patterns of loud-soft where either the loud
+# determines a head-accented pattern or on account of the long duration
+# after the loud a tail-accented pattern...
+#
+# but what does this sound like?
+
+use 5.14.0;
+use warnings;
+use MIDI;
+
+my $outfile = shift // "out.midi";
+
+my $channel = 0;
+my $note    = 60;
+
+my ( $cur_dur, $min_dur, $max_dur, $now, $step );
+
+$cur_dur = $min_dur = 96;
+$max_dur = $min_dur * 4;
+$now     = 0;
+$step    = 8;
+
+my $loud_velo = 110;
+my $soft_velo = 80;
+my $novelo    = 0;
+
+my $is_loud = 1;
+
+my @events = ( [ 'set_tempo', $channel, 450000 ], );
+
+NOISE: while (1) {
+    my ( $dur, $velo );
+    if ($is_loud) {
+        $dur  = $cur_dur;
+        $velo = $loud_velo;
+    } else {
+        $dur  = $min_dur;
+        $velo = $soft_velo;
+    }
+    push @events,
+      [ 'note_on',  $now, $channel, $note, $velo ],
+      [ 'note_off', $dur, $channel, $note, $novelo ];
+
+    if ($is_loud) {
+        $cur_dur += $step;
+        last NOISE if $cur_dur >= $max_dur;
+    }
+    $is_loud ^= 1;
+}
+
+my $track = MIDI::Track->new( { 'events' => \@events } );
+my $opus =
+  MIDI::Opus->new( { 'format' => 0, 'ticks' => 96, 'tracks' => [$track] } );
+$opus->write_to_file($outfile);
