@@ -1,0 +1,153 @@
+\documentclass[12pt,a4paper]{article}
+\setlength{\topmargin}{-5mm}
+\setlength{\textheight}{244mm}
+\setlength{\oddsidemargin}{0mm}
+\setlength{\textwidth}{165mm}
+
+\usepackage{fancyvrb}
+\DefineVerbatimEnvironment{verbatim}{Verbatim}{xleftmargin=4mm}
+
+\usepackage{lmodern}
+\usepackage[T1]{fontenc}
+\usepackage{pxfonts}
+\usepackage{textcomp}
+\usepackage{tabu}
+\usepackage{graphicx}
+\usepackage[super]{nth}
+
+\title{Polyphonic Dissonance}
+\author{Jeremy Mates}
+\date{October  6, 2019}
+
+\usepackage{hyperref}
+\hypersetup{pdfauthor={Jeremy Mates},pdftitle={Polyphonic Dissonance}}
+
+\begin{document}
+\bibliographystyle{plainnat}
+\maketitle
+
+\setlength{\parindent}{0pt}
+
+This article outlines dissonances used in \nth{16} century
+polyphony\cite{Merritt1939}. \\
+
+Measures are divided into strong (0,2) and weak (1,3) beats. These beats
+are in turn subdivided into on- and off-beat phases. Some dissonances
+may only appear on strong or weak beats or only on the offbeat phase of
+a beat. Various dissonances must be prepared and resolved in specific
+ways, often but not always by stepping downwards.
+
+\lilypondfile[noindent,quote]{polyphonic-measure.ly}
+
+In \nth{16} century polyphony the half note was the basis for strong and
+weak beats (4/2 time); that instead has been changed here to the quarter
+note (4/4 time). It may be helpful to label the weak, strong, and
+offbeats in the examples below. \\
+
+Consonant intervals include the unison, thirds, perfect fifth, sixths,
+and the octave. Restrictions are generally lifted for intervals greater
+than an octave. In two-voice music a perfect or augmented fourth is
+always a dissonance; with three or more voices they are consonant only
+if the interval does not appear between the lowest voice and any other.
+From a harmonic perspective, this permits only root and first inversion
+chords. The diminished triad is only used in first inversion.
+
+\section*{The Dissonances}
+
+\flushleft
+\begin{description}
+
+\item[Passing Notes] as eighth notes occur on an off-beat and step
+upwards or downwards. Here, the dissonant D (marked with *) form a
+\nth{7} or \nth{4} with the E or A below in the first measure.
+
+\lilypondfile[noindent,quote]{polyphonic-passing.ly}
+
+Sometimes passing notes may be a quarter note; if so, they will only appear on a weak beat of the measure (1,3). Passing quarter note dissonances most often descend though only rarely may ascend in 16th century polyphony.
+
+Passing dissonances may also be sixteenth notes in which case the voice
+will descend or ascend by a fourth instead of a third.
+
+\item[Auxiliary Notes] step away from then back to a starting note. They always occur on an off-beat. Sixteenth notes may be used to elaborate the voice.
+
+\lilypondfile[noindent,quote]{polyphonic-auxiliary.ly}
+
+\item[Changing Note Groups] are a four-note unit that steps down to a
+dissonance, drops by a third, then steps up to what may be a consonant
+or dissonant note. The first and third notes are always consonant. The
+dissonant second note must always be an eighth note and must always
+appear on an off-beat. The first and third notes can be longer than
+eighth notes but are usually never more than a half note in duration.
+The fourth note will usually then step up to the next note that follows.
+
+\lilypondfile[noindent,quote]{polyphonic-changing-note-group.ly}
+
+The first example shows a changing note group in the upper voice, and
+the second one in the lower voice with a more varied rhythm.
+
+\item[Cambiatas] or changed notes occur when a consonant and dissonant
+note exchange positions with one another, placing the dissonance on what
+must only be the downbeat of a weaker beat (1,3) of the measure. The
+dissonant note must not be leaped to or away from, and will most often
+descend\footnote{The discussion on \cite{Merritt1939} p.74 is unclear to
+me due to one phrase mandating downward motion through the dissonance
+and another allowing for step motion with the qualification ``and in the
+Golden Age almost always descends'' indicating that there is rare upward
+motion of some form.} to the following consonant.
+
+\lilypondfile[noindent,quote]{polyphonic-cambiata.ly}
+
+Contrast this with a passing note dissonance where the consonance must
+occur on the downbeat of a beat.
+
+\clearpage
+\item[Suspensions] occur on the strong beats (0,2) of the measure and
+must be prepared on the (3,1) beat prior and resolved on the (1,3) beat
+that follows; the following shows a 3-0-1 pattern. The resolution may be
+elaborated with a number of different forms as shown.
+
+\lilypondfile[noindent,quote]{polyphonic-suspension.ly}
+
+It may be important not to spoil the resolution by using that note (C,
+in the above examples) in some other voice prior to resolution, though
+this requirement is less urgent if the dissonant interval is a \nth{9}
+or greater. The effectiveness of a suspension will depend on the number
+of voices involved and whether the suspension is above or below the
+other voices, as well as on the instrumentation used.
+
+Followers of harmony may note that suspensions look a lot like a seventh
+or a ninth chord (C-E-(G-B)-D) especially should the suspended note be
+repeated instead of being tied over from the previous beat. But such
+chords are here a by-product of the rules of counterpoint.
+
+\item[Anticipations] or \textit{portamento} are eighth note
+anticipations of the subsequent consonant interval, and may or may not
+be dissonant. In \nth{16} century polyphony usually only the downwards
+anticipation is used. The anticipation must occur on an off-beat.
+
+\lilypondfile[noindent,quote]{polyphonic-anticipation.ly}
+
+\item[Consonant Fourths] are an exception to the rule that the interval
+of a fourth with the lowest voice is a dissonance; instead, the
+interval is used typically in cadences and particularly for the
+ultimate cadence.
+
+\lilypondfile[noindent,quote]{polyphonic-consonant4th.ly}
+
+The F is dissonant with the bass C though here prepares for the G-F
+dissonance on the subsequent strong beat. There is no special
+preparation of the C-F interval as would usually be required, so the
+fourth is handled as if it were a consonant. A six-four chord is usually
+created by this form, one of the few if only places such will appear in
+polyphonic music from this period.
+
+\end{description}
+
+\section*{Combinations}
+
+Dissonances can be combined vertically or played out horizontally as
+permitted by the rules of counterpoint and the forms specified
+above\cite{Mates2019}.
+
+\bibliography{references}
+\end{document}
