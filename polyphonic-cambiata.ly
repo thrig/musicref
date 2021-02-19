@@ -5,6 +5,6 @@
   b4 a8^"*" g a4
 } } \\
 { \relative e'  {
-  e2 d4
+  e2 f4
 } }
 >>
